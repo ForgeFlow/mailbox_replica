@@ -45,5 +45,5 @@ XML fields declaration:
  'js': [
      'static/src/js/view_form.js'
  ],
- 'installable': True,
+ 'installable': False,
  'application': False}
