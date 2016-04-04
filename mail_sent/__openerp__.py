@@ -1,15 +1,26 @@
+# -*- coding: utf-8 -*-
 {
-    'name' : 'Sentbox',
-    'version' : '1.0.2',
-    'author' : 'IT-Projects LLC, Ivan Yelizariev',
-    'license': 'LGPL-3',
-    'category' : 'Social Network',
-    'website' : 'https://twitter.com/yelizariev',
-    'price': 9.00,
-    'currency': 'EUR',
-    'depends' : ['mail'],
-    'data':[
-        'views.xml',
-        ],
-    'installable': False
+    "name": "Mail Sent",
+    "summary": """Create sent channel""",
+    "category": "Discuss",
+    "images": [],
+    "version": "1.0.0",
+
+    "author": "IT-Projects LLC, Pavel Romanchenko",
+    "website": "https://it-projects.info",
+    "license": "LGPL-3",
+
+    "depends": [
+        "base",
+        "mail",
+        "mail_base"
+    ],
+
+    "data": [
+        "views/templates.xml",
+    ],
+    "qweb": [
+        "static/src/xml/menu.xml",
+    ],
+    'installable': True,
 }
