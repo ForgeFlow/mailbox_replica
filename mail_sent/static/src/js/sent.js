@@ -1,4 +1,4 @@
-odoo.define('mail_archives.archives', function (require) {
+odoo.define('mail_sent.sent', function (require) {
 "use strict";
 
 var base_obj = require('mail_base.base');
@@ -20,31 +20,36 @@ var _t = core._t;
 base_obj.MailTools.include({
     get_properties: function(msg){
         var properties = this._super.apply(this, arguments);
-        properties.is_archive = this.property_descr("channel_archive", msg, this);
+        properties.is_sent = this.property_descr("channel_sent", msg, this);
         return properties;
     },
 
     set_channel_flags: function(data, msg){
         this._super.apply(this, arguments);
-        msg.is_archive = true;
+        if (_.contains(data.author_id, session.partner_id) && data.partner_ids.length > 0) {
+            msg.is_sent = true;
+        }
         return msg;
     },
 
     get_channel_array: function(msg){
         var arr = this._super.apply(this, arguments);
-        return arr.concat('channel_archive');
+        return arr.concat('channel_sent');
     },
 
     get_domain: function(channel){
-        return (channel.id === "channel_archive") ? [] : this._super.apply(this, arguments);
+        return (channel.id === "channel_sent") ? [
+            ['sent', '=', true],
+            ['author_id.user_ids', 'in', [openerp.session.uid]]
+        ] : this._super.apply(this, arguments);
     }
 });
 
 base_obj.chat_manager.is_ready.then(function(){
-        // Add archive channel
+        // Add sent channel
         base_obj.chat_manager.mail_tools.add_channel({
-            id: "channel_archive",
-            name: _t("Archive"),
+            id: "channel_sent",
+            name: _t("Sent"),
             type: "static"
         });
 
