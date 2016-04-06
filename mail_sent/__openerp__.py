@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
-    "name": "Mail Sent",
-    "summary": """Create sent channel""",
+    "name": "Sentbox",
+    "summary": """Quick way to find sent messages""",
     "category": "Discuss",
     "images": [],
     "version": "1.0.0",
