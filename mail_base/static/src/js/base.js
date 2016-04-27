@@ -11,6 +11,7 @@ var time = require('web.time');
 var web_client = require('web.web_client');
 
 var _t = core._t;
+var _lt = core._lt;
 var LIMIT = 100;
 var preview_msg_max_size = 350;  // optimal for native english speakers
 
@@ -62,6 +63,11 @@ var channel_seen = _.throttle(function (channel) {
 
 var ChatAction = core.action_registry.get('mail.chat.instant_messaging');
 ChatAction.include({
+    init: function(parent, action, options) {
+        this._super.apply(this, arguments);
+        this.channels_show_send_button = ['channel_inbox'];
+        this.channels_display_subject = [];
+    },
     start: function() {
         var result = this._super.apply(this, arguments);
 
@@ -92,6 +98,20 @@ ChatAction.include({
             }
         });
         return result;
+    },
+    set_channel: function(channel){
+        var result = this._super.apply(this, arguments);
+        var self = this;
+        return $.when(result).done(function() {
+            self.$buttons
+                .find('.o_mail_chat_button_new_message')
+                .toggle(self.channels_show_send_button.indexOf(channel.id) != -1);
+        });
+    },
+    get_thread_rendering_options: function (messages) {
+        var options = this._super.apply(this, arguments);
+        options.display_subject = options.display_subject || this.channels_display_subject.indexOf(this.channel.id) != -1;
+        return options;
     }
 });
 
@@ -269,8 +289,6 @@ var MailTools = core.Class.extend({
         var msg = {
             id: data.id,
             author_id: data.author_id,
-            needaction_partner_ids: data.needaction_partner_ids,
-            partner_ids: data.partner_ids,
             body_short: data.body_short || "",
             body: data.body || "",
             date: moment(time.str_to_datetime(data.date)),
@@ -356,7 +374,7 @@ var MailTools = core.Class.extend({
         } else {
             channel = chat_manager.mail_tools.make_channel(data, options);
             channels.push(channel);
-            channels = _.sortBy(channels, function (channel) { return channel.name.toLowerCase(); });
+            channels = _.sortBy(channels, function (channel) { return _.isString(channel.name) ? channel.name.toLowerCase() : '' });
             if (!options.silent) {
                 chat_manager.bus.trigger("new_channel", channel);
             }
@@ -847,7 +865,7 @@ chat_manager.undo_mark_as_read = function (message_ids, channel) {
 chat_manager.mark_channel_as_seen = function (channel) {
         if (channel.unread_counter > 0 && channel.type !== 'static') {
             chat_manager.mail_tools.update_channel_unread_counter(channel, 0);
-            chat_manager.mail_tools.channel_seen(channel);
+            channel_seen(channel);
         }
     };
 chat_manager.get_channels = function () {
@@ -1045,7 +1063,7 @@ chat_manager.get_channels_preview = function (channels) {
         });
     };
 chat_manager.get_message_body_preview = function (message_body) {
-        return chat_manager.mail_tools.parse_and_transform(message_body, inline);
+        return chat_manager.mail_tools.parse_and_transform(message_body, chat_manager.mail_tools.inline);
     };
 chat_manager.search_partner = function (search_val, limit) {
         return PartnerModel.call('im_search', [search_val, limit || 20], {}, {shadow: true}).then(function(result) {
@@ -1061,7 +1079,7 @@ chat_manager.search_partner = function (search_val, limit) {
         });
     };
 chat_manager.send_native_notification = function(){
-    chat_manager.mail_tools.send_native_notification.apply(chat_manager.mail_tools, arguments)
+    return chat_manager.mail_tools.send_native_notification.apply(chat_manager.mail_tools, arguments)
 };
 chat_manager.bus.on('client_action_open', null, function (open) {
     client_action_open = open;
@@ -1071,13 +1089,13 @@ chat_manager.bus.on('client_action_open', null, function (open) {
 function init(){
     chat_manager.mail_tools.add_channel({
         id: "channel_inbox",
-        name: _t("Inbox"),
+        name: _lt("Inbox"),
         type: "static"
     }, { display_needactions: true });
 
     chat_manager.mail_tools.add_channel({
         id: "channel_starred",
-        name: _t("Starred"),
+        name: _lt("Starred"),
         type: "static"
     });
 
@@ -1100,6 +1118,8 @@ function init(){
     var load_menu_id = ir_model.call("xmlid_to_res_id", ["mail.mail_channel_menu_root_chat"], {}, {shadow: true});
     var load_action_id = ir_model.call("xmlid_to_res_id", ["mail.mail_channel_action_client_chat"], {}, {shadow: true});
 
+    // unsubscribe and then subscribe to the event, to avoid duplication of new messages
+    bus.off('notification');
     bus.on('notification', null, chat_manager.mail_tools.on_notification);
 
     return $.when(load_menu_id, load_action_id, load_channels, load_emojis).then(function (menu_id, action_id) {
