@@ -5,5 +5,5 @@
 Usage
 =====
 
-* Open menu ``Discuss / All messages``
+* Open menu ``Messaging / All messages``
 * You see all messages
