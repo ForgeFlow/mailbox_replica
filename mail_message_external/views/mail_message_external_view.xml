@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+        <!-- CRM Lead Form View  -->
+        <record model="ir.ui.view" id="mail_message_external_form_view">
+        <field name="name">mail.message.external.form</field>
+        <field name="model">mail.message.external</field>
+        <field name="arch" type="xml">
+            <form string="External Messages Form" version="7.0">
+                <header>
+                </header>
+                <sheet>
+                    <div class="oe_right oe_button_box" name="buttons">
+                    </div>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="partner_id" string="Partner"/>
+                        </group>
+                        <group>
+                            <field name="email_from" widget="email"/>
+                            <field name="email_to"/>
+                            <field name="email_cc"/>
+                            <field name="create_date"/>
+                        </group>
+                    </group>
+                    <notebook colspan="4">
+                        <page string="Internal Notes">
+                            <field name="description"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+        </record>
+
+        <record model="ir.ui.view" id="mail_message_external_tree_view">
+            <field name="name">mail.message.external.tree</field>
+            <field name="model">mail.message.external</field>
+            <field name="arch" type="xml">
+                <tree string="External Messages"
+                      fonts="bold:message_unread==True">
+                    <field name="create_date"/>
+                    <field name="email_from"/>
+                    <field name="email_to"/>
+                    <field name="email_cc"/>
+                    <field name="name"/>
+                    <field name="message_unread" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="mail_message_external_search_view">
+             <field name="name">mail.message.external.search</field>
+            <field name="model">mail.message.external</field>
+            <field name="arch" type="xml">
+                <search string="Search External Messages">
+                    <field name="name" string="Opportunity"
+                           filter_domain="['|','|','|',('partner_id','ilike',self),('email_from','ilike',self),('email_to', 'ilike', self),('email_cc', 'ilike', self)]"/>
+                    <field name="partner_id"/>
+                    <field name="create_date"/>
+                    <field name="email_from"/>
+                    <field name="email_to"/>
+                    <field name="email_cc"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_view_mail_message_external"
+                model="ir.actions.act_window">
+            <field name="name">External Email Messages</field>
+            <field name="res_model">mail.message.external</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="mail_message_external_search_view"/>
+        </record>
+
+        <!-- Add menu entry in Settings/Email -->
+        <menuitem name="External Emails" id="menu_mail_message_external"
+                  parent="base.menu_email"
+                  action="action_view_mail_message_external" />
+
+
+    </data>
+</openerp>
