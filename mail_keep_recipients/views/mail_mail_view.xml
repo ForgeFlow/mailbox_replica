@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+        <record model="ir.ui.view" id="view_mail_form">
+            <field name="name">mail.mail.form</field>
+            <field name="model">mail.mail</field>
+            <field name="inherit_id" ref="mail.view_mail_form"/>
+            <field name="arch" type="xml">
+                <field name="partner_ids" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </field>
+                <field name="partner_ids" position="after">
+                    <field name="recipient_ids" widget="many2many_tags"/>
+                </field>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_mail_tree">
+            <field name="name">mail.mail.tree</field>
+            <field name="model">mail.mail</field>
+            <field name="inherit_id" ref="mail.view_mail_tree"/>
+            <field name="arch" type="xml">
+                <field name="partner_ids" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </field>
+                <field name="partner_ids" position="after">
+                    <field name="recipient_ids" widget="many2many_tags"/>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</openerp>
