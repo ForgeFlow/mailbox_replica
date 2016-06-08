@@ -7,10 +7,9 @@
     'price': 9.00,
     'currency': 'EUR',
     'depends' : ['base', 'web', 'fetchmail', 'mail'],
-    'data': [],
-    'js': [
-        'static/src/js/main.js',
-    ],
+    'data': [
+        'views.xml',
+        ],
     'qweb': [
         "static/src/xml/main.xml",
     ],

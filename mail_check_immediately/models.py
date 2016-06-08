@@ -4,81 +4,68 @@ import datetime
 from openerp.tools.translate import _
 from openerp import tools
 
-from openerp.osv import fields, osv, orm
-from openerp import SUPERUSER_ID
+from openerp import exceptions
+from openerp import models, fields, api
 
 
-class FetchMailServer(orm.Model):
+class FetchMailServer(models.Model):
     _inherit = 'fetchmail.server'
     _name = 'fetchmail.server'
 
     _last_updated = None
 
-    def _run_time(self, cr, uid, ids, name, args, context=None):
-        if not self._last_updated:
-            self._last_updated = tools.datetime.now()
-        res = dict.fromkeys(ids, False)
-        for server in self.browse(cr, uid, ids, context=context):
-            src_tstamp_str = self._last_updated.strftime(
-                tools.misc.DEFAULT_SERVER_DATETIME_FORMAT)
-            src_format = tools.misc.DEFAULT_SERVER_DATETIME_FORMAT
-            dst_format = tools.misc.DEFAULT_SERVER_DATETIME_FORMAT
-            dst_tz_name = context.get('tz')
-            _now = tools.misc.server_to_local_timestamp(
-                src_tstamp_str, src_format, dst_format, dst_tz_name)
-            res[server.id] = _now
-        return res
-
-    _columns = {
-        'run_time': fields.function(_run_time, method=True,
-                                    type='datetime',
-                                    string="Launch time")
-    }
+    run_time = fields.Datetime(string="Launch time", compute='_run_time', store=False)
 
     @classmethod
     def _update_time(cls):
+
         cls._last_updated = tools.datetime.now()
 
-    def _fetch_mails(self, cr, uid, ids=False, context=None):
-        if context is None:
-            context = {}
-        if context.get('run_fetchmail_manually'):
+    @api.one
+    def _run_time(self):
+        if not self._last_updated:
+
+            self._last_updated = tools.datetime.now()
+
+        src_tstamp_str = self._last_updated.strftime(tools.misc.DEFAULT_SERVER_DATETIME_FORMAT)
+        src_format = tools.misc.DEFAULT_SERVER_DATETIME_FORMAT
+        dst_format = tools.misc.DEFAULT_SERVER_DATETIME_FORMAT
+        dst_tz_name = self._context.get('tz') or self.env.user.tz
+        _now = tools.misc.server_to_local_timestamp(src_tstamp_str, src_format, dst_format, dst_tz_name)
+
+        self.run_time = _now
+
+    @api.model
+    def _fetch_mails(self):
+
+        if self._context.get('run_fetchmail_manually'):
             # if interval less than 5 seconds
-            if self._last_updated \
-                    and (datetime.datetime.now() - self._last_updated) < \
-                    datetime.timedelta(0, 5):
-                raise orm.except_orm(
-                    _('Error'),
-                    _('Task can be started no earlier than 5 seconds.'))
-        res = super(FetchMailServer, self)._fetch_mails(cr, SUPERUSER_ID, ids,
-                                                        context=context)
+            if self._last_updated and (datetime.datetime.now() - self._last_updated) < datetime.timedelta(0, 5):
+                raise exceptions.Warning(_('Error'), _('Task can be started no earlier than 5 seconds.'))
 
-        self._last_updated = tools.datetime.now()
-        return res
+        super(FetchMailServer, self)._fetch_mails()
+        self._update_time()
 
 
-class FetchMailImmediately(orm.AbstractModel):
+class FetchMailImmediately(models.AbstractModel):
 
     _name = 'fetch_mail.imm'
 
-    def get_last_update_time(self, cr, uid, context=None):
-        fechmail_obj = self.pool['fetchmail.server']
-        res_ids = fechmail_obj.search(cr, SUPERUSER_ID,
-                                      [('state', '=', 'done')],
-                                      context=context)
-        res = fechmail_obj.browse(cr, SUPERUSER_ID, res_ids, context=context)
+    @api.model
+    def get_last_update_time(self):
+        res = self.env['fetchmail.server'].sudo().with_context(tz=self.env.user.tz).search([('state', '=', 'done')])
         array = [r.run_time for r in res]
         if array:
             return array[0]
         else:
             return None
 
-    def run_fetchmail_manually(self, cr, uid, context=None):
-        fetchmail_obj = self.pool['fetchmail.server']
-        ir_cron_obj = self.pool['ir.cron']
-        cron_id = self.pool.get('ir.model.data').get_object_reference(
-            cr, uid, 'fetchmail', 'ir_cron_mail_gateway_action')[1]
-        ir_cron_obj._try_lock(cr, uid, [cron_id], context=context)
-        context.update({'run_fetchmail_manually': True})
-        fetchmail_obj._fetch_mails(cr, uid, False, context=context)
-        return True
+    @api.model
+    def run_fetchmail_manually(self):
+
+        fetchmail_task = self.env.ref('fetchmail.ir_cron_mail_gateway_action')
+        fetchmail_task_id = fetchmail_task.id
+        fetchmail_model = self.env['fetchmail.server'].sudo()
+
+        fetchmail_task._try_lock()
+        fetchmail_model.with_context(run_fetchmail_manually=True)._fetch_mails()

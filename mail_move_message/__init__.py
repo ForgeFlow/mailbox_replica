@@ -1,1 +1,2 @@
-from . import mail_move_message_models
+import controllers
+import mail_move_message_models
