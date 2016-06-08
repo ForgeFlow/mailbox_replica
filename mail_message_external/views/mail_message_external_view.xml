@@ -88,6 +88,9 @@
                   parent="base.menu_email"
                   action="action_view_mail_message_external" />
 
-
+        <menuitem name="External Emails" id="menu_messaging_mail_message_external"
+                  parent="mail.mail_feeds"
+                  action="action_view_mail_message_external"
+                  sequence="21"/>
     </data>
 </openerp>
