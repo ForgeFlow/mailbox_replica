@@ -1,3 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-"access_fetchmail_mail_server","fetchmail_mail_server","model_fetchmail_server",,1,1,1,1
-
+access_fetchmail_mail_server,fetchmail_mail_server,model_fetchmail_server,,1,1,1,1
+access_fetchmail_server,fetchmail.server,model_fetchmail_server,group_email_server,1,1,1,1
+access_fetchmail_server_mailbox,fetchmail.server.mailbox,model_fetchmail_server,group_email_server,1,1,1,1

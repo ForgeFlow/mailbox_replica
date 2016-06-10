@@ -23,6 +23,7 @@
             <field name="name">Open Outgoing Menu</field>
             <field name="tag">reload</field>
             <field name="params" eval="{'menu_id': ref('mail_outgoing.menu_mail_outgoing')}"/>
+            <field name="domain">[('author_id','=', uid)]</field>
         </record>
         <record id="base.open_menu" model="ir.actions.todo">
             <field name="action_id" ref="action_mail_outgoing_menu"/>

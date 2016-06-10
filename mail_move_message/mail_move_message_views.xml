@@ -32,14 +32,14 @@
                             <button string="Create new record"
                                     name="create_record" type="object"
                                     class="oe_highlight"
-                                    attrs="{'invisible':['|',('model','=',False)]}" special="quick_create" field="res_id" use_for_mail_move_message="True"/>
+                                    attrs="{'invisible':['|',('model','=',False),('partner_id','=',False)]}" special="quick_create" field="res_id" use_for_mail_move_message="True"/>
                         </div>
                         <label for="move_back" attrs="{'invisible':[('message_is_moved','=',False)]}"/>
                         <div attrs="{'invisible':[('message_is_moved','=',False)]}">
                             <field name="move_back"/>
                         </div>
                     </group>
-                    <button name="move" string="Move" type="object" class="oe_highlight" attrs="{'invisible':[('can_move', '=', False)]}"/>
+                    <button name="move" string="Move" type="object" class="oe_highlight" attrs="{'invisible':['|',('can_move', '=', False),('res_id','=',False)]}"/>
                     <button string="Close" class="" special="cancel" />
                     <separator string="Message"/>
                     <group>
