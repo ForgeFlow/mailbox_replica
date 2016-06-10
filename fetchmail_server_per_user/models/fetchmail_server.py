@@ -32,6 +32,12 @@ class FetchMailServer(orm.Model):
         'user_id': fields.many2one('res.users', string='Owner'),
     }
 
+    def _get_current_user(self, cr, uid, context=None):
+        return [uid]
+
+    _defaults = {
+        'user_id': _get_current_user,
+    }
     _sql_constraints = [
         ('fetchmail_user_uniq', 'unique(user_id)', 'That user already has a '
                                                    'Fetchmail server.'),
