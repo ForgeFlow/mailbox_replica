@@ -44,7 +44,7 @@
                             <field name="attach"/>
                             <field name="original"/>
                             <field name="active"/>
-                            <field name="user_id" domain="[('user_id','=', uid)]"/>
+                            <field name="user_id"/>
                         </group>
                     </page>
                 </xpath>
