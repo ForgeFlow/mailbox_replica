@@ -33,7 +33,7 @@ class FetchMailServer(orm.Model):
     }
 
     def _get_current_user(self, cr, uid, context=None):
-        return [uid]
+        return uid
 
     _defaults = {
         'user_id': _get_current_user,
