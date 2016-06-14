@@ -31,7 +31,6 @@ in the notification again.
     """,
     'depends' : ['mail'],
     'data':[
-        'views/mail_mail_view.xml',
     ],
     'installable': True
 }

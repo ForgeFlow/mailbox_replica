@@ -18,19 +18,18 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp.osv import fields
-from openerp.osv.orm import Model
+from openerp import api, fields, models
 
 
-class FetchMailServerMailbox(Model):
+class FetchMailServerMailbox(models.Model):
     _name = 'fetchmail.server.mailbox'
     _rec_name = 'path'
 
-    _columns = {
-        'path': fields.char(
-            'Path', size=256, help='The path to your mail '
-            "folder. Typically would be something like 'INBOX.myfolder'",
-            required=True
-        ),
-        'server_id': fields.many2one('fetchmail.server', 'Server'),
-    }
+    path = fields.Char('Path', size=256, help='The path to your mail '"folder. Typically would be something like 'INBOX.myfolder'",required=True)
+    server_id = fields.Many2one('fetchmail.server', 'Server')
+
+
+class FetchMailServerMailboxPath(models.Model):
+    _name = 'fetchmail.server.mailbox.path'
+
+    server_id = fields.Many2one('fetchmail.server', 'Server')

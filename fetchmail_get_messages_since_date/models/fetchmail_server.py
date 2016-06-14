@@ -26,33 +26,27 @@ try:
     import cStringIO as StringIO
 except ImportError:
     import StringIO
-from openerp.osv import fields, orm
+from openerp import api, fields, models
 from openerp import tools
 
 _logger = logging.getLogger(__name__)
 
 
-class FetchMailServer(orm.Model):
+class FetchMailServer(models.Model):
     _inherit = 'fetchmail.server'
 
-    _columns = {
-        'imap_fetch_from_last_date': fields.boolean(
+    imap_fetch_from_last_date = fields.Boolean(
             'Fetch from last fetch date',
             help='Fetch only IMAP emails that have not yet been received from '
-                 'the last check.'),
-        'mailbox_ids': fields.one2many(
-            'fetchmail.server.mailbox', 'server_id', 'Mailboxes'),
-        'mailbox_path_ids': fields.one2many(
-            'fetchmail.server.mailbox.path', 'server_id', 'Mailbox paths',
-            readonly=True),
-
-    }
+                 'the last check.')
+    mailbox_ids = fields.One2many('fetchmail.server.mailbox', 'server_id', 'Mailboxes')
+    mailbox_path_ids = fields.One2many('fetchmail.server.mailbox.path', 'server_id', 'Mailbox Path',readonly=True)
 
     def fetch_mail(self, cr, uid, ids, context=None):
 
         if context is None:
             context = {}
-        context['fetchmail_cron_running'] = True
+        #context['fetchmail_cron_running'] = True
         mail_thread = self.pool.get('mail.thread')
         action_pool = self.pool.get('ir.actions.server')
         check_original = []
