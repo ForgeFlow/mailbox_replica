@@ -77,15 +77,6 @@
             <field name="act_window_id" ref="action_email_server_form_messaging"/>
         </record>
 
-        <record model="ir.actions.act_window" id="action_ir_mail_server_list_messaging">
-            <field name="name">Outgoing Mail Server</field>
-            <field name="res_model">ir.mail_server</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
-            <field name="view_id" ref="base.ir_mail_server_list" />
-            <field name="domain">[('user_id','=', uid)]</field>
-        </record>
-
         <menuitem
             parent="mail.mail_feeds"
             id="menu_action_fetchmail_server_messaging"
@@ -93,13 +84,6 @@
             name="Incoming Mail Server"
             sequence="21"
             groups="group_email_server"
-        />
-
-        <menuitem id="menu_mail_servers_messaging"
-                  parent="mail.mail_feeds"
-                  action="action_ir_mail_server_list_messaging"
-                  sequence="22"
-                  groups="group_email_server"
         />
 
     </data>
