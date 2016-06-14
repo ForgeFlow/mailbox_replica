@@ -1,9 +1,9 @@
-from openerp.osv import fields, osv, orm
+from openerp.osv import fields, osv
 from openerp import SUPERUSER_ID
 from openerp.tools import email_split
+from openerp import models
 
-
-class MailCreatePartnerWizard(orm.TransientModel):
+class MailCreatePartnerWizard(osv.osv_memory):
     _name = 'mail_create_partner.wizard'
 
     def default_get(self, cr, uid, fields_list, context=None):
@@ -77,7 +77,7 @@ class MailCreatePartnerWizard(orm.TransientModel):
         return context
 
 
-class ResPartner(orm.Model):
+class ResPartner(models.Model):
     _inherit = 'res.partner'
 
     def create(self, cr, uid, vals, context=None):
