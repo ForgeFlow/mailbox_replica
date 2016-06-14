@@ -44,11 +44,16 @@ class MailNotification(orm.Model):
                 continue
             # Do not send emails to partners that have their own fetchmail,
             # and the fetchmail is confirmed.
+
+            user = self.pool.get('res.users').search(cr, uid, [
+                ('partner_id', '=', partner.id),
+            ], context=context)
+
             if (
                 partner.notification_email_send != 'none' and
                 message.type == 'email' and
-                partner.fetchmail_server_id and
-                partner.fetchmail_server_id.state == 'done'
+                user[0].fetchmail_server_id and
+                user[0].fetchmail_server_id.state == 'done'
             ):
                 if partner.id in res:
                     res.remove(partner.id)

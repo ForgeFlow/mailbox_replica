@@ -6,7 +6,7 @@
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
-#    published by the Free Software Foundation, either version 3 of the
+#    published by the Free Software Foundation, either version 3 of theh
 #    License, or (at your option) any later version.
 #
 #    This program is distributed in the hope that it will be useful,
@@ -20,24 +20,28 @@
 ##############################################################################
 
 {
-    'name': 'Fetch mails from IMAP since a date',
-    'version': '1.0',
-    'description': """
-Fetch mails from IMAP since a date
-==================================
-Adds the possibility to fetch emails from IMAP from a specific date.
-
-    """,
+    'name': 'Mail Fetchmail Server SMTP',
+    'category': 'Mail',
+    'description': "Configure Fetchmail server from Mail.",
     'author': 'Eficent',
-    'website': 'http://www.eficent.com',
-    "category": "Tools",
-    "depends": ['fetchmail'],
+    'license': 'AGPL-3',
+    'website': 'http://eficent.com',
+    'version': '7.0.0.1.0',
+    'sequence': 10,
+    'depends': [
+                'base',
+                'mail',
+                'fetchmail',
+                ],
     'data': [
-        'security/ir.model.access.csv',
-        'views/fetchmail_server.xml',
-    ],
-    'js': [],
+             'views/ir_mail_server_view.xml',
+             ],
+    'init': [],
+    'demo': [],
+    'update': [],
+    'test': [],  # YAML files with tests
     'installable': True,
-    'active': False,
+    'application': False,
+    'auto_install': False,  # If it's True, the modules will be auto-installed when all dependencies are installed
     'certificate': '',
 }

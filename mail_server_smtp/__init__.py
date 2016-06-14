@@ -18,26 +18,4 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
-{
-    'name': 'Fetch mails from IMAP since a date',
-    'version': '1.0',
-    'description': """
-Fetch mails from IMAP since a date
-==================================
-Adds the possibility to fetch emails from IMAP from a specific date.
-
-    """,
-    'author': 'Eficent',
-    'website': 'http://www.eficent.com',
-    "category": "Tools",
-    "depends": ['fetchmail'],
-    'data': [
-        'security/ir.model.access.csv',
-        'views/fetchmail_server.xml',
-    ],
-    'js': [],
-    'installable': True,
-    'active': False,
-    'certificate': '',
-}
+from . import models

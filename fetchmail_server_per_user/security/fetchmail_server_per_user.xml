@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record model="res.groups" id="group_email_server">
+            <field name="name">Email Server</field>
+			<field name="comment">Gets access to set their own email server</field>
+            <field name="users" eval="[(4, ref('base.group_user'))]"/>
+		</record>
+
+	</data>
+</openerp>

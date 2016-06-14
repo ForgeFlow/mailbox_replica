@@ -18,26 +18,23 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+import logging
+from openerp.osv import fields, orm
 
-{
-    'name': 'Fetch mails from IMAP since a date',
-    'version': '1.0',
-    'description': """
-Fetch mails from IMAP since a date
-==================================
-Adds the possibility to fetch emails from IMAP from a specific date.
 
-    """,
-    'author': 'Eficent',
-    'website': 'http://www.eficent.com',
-    "category": "Tools",
-    "depends": ['fetchmail'],
-    'data': [
-        'security/ir.model.access.csv',
-        'views/fetchmail_server.xml',
-    ],
-    'js': [],
-    'installable': True,
-    'active': False,
-    'certificate': '',
-}
+_logger = logging.getLogger(__name__)
+
+
+class ir_mail_server(orm.Model):
+    _inherit = 'ir.mail_server'
+
+    _columns = {
+        'user_id': fields.many2one('res.users', string='Owner'),
+    }
+
+    def _get_current_user(self, cr, uid, context=None):
+        return uid
+
+    _defaults = {
+        'user_id': _get_current_user,
+    }
