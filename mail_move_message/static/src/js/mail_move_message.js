@@ -5,6 +5,7 @@ odoo.define('mail_move_message.relocate', function (require) {
     var chat_manager = require('mail.chat_manager');
     var base_obj = require('mail_base.base');
     var thread = require('mail.ChatThread');
+    var chatter = require('mail.Chatter');
     var Model = require('web.Model');
     var form_common = require('web.form_common');
     var widgets = require('web.form_widgets');
@@ -12,23 +13,14 @@ odoo.define('mail_move_message.relocate', function (require) {
 
     var _t = core._t;
 
-    // Add click reaction in the events of the thread object
     thread.include({
         init: function(){
             this._super.apply(this, arguments);
+            // Add click reaction in the events of the thread object
             this.events['click .oe_move'] = function(event) {
                 var message_id = $(event.currentTarget).data('message-id');
                 this.trigger("move_message", message_id);
             }
-        }
-    });
-
-    var chatter = require('mail.Chatter');
-    chatter.include({
-        start: function() {
-            var result = this._super.apply(this, arguments);
-            this.thread.on('move_message', this, this.on_move_message);
-            return $.when(result).done(function() {});
         },
         on_move_message: function(message_id){
             var action = {
@@ -48,32 +40,23 @@ odoo.define('mail_move_message.relocate', function (require) {
         }
     });
 
+    chatter.include({
+        start: function() {
+            var result = this._super.apply(this, arguments);
+            // For show wizard in the form
+            this.thread.on('move_message', this, this.thread.on_move_message);
+            return $.when(result).done(function() {});
+        }
+    });
+
 
     var ChatAction = core.action_registry.get('mail.chat.instant_messaging');
     ChatAction.include({
         start: function() {
             var result = this._super.apply(this, arguments);
-            this.thread.on('move_message', this, this.on_move_message);
+            // For show wizard in the channels
+            this.thread.on('move_message', this, this.thread.on_move_message);
             return $.when(result).done(function() {});
-        },
-        on_move_message: function(message_id){
-            var self = this;
-            var context = {'default_message_id': message_id};
-            var action = {
-                name: _t('Relocate Message'),
-                type: 'ir.actions.act_window',
-                res_model: 'mail_move_message.wizard',
-                view_mode: 'form',
-                view_type: 'form',
-                views: [[false, 'form']],
-                target: 'new',
-                context: context
-            };
-            self.message_id = message_id;
-
-            self.do_action(action, {
-                'on_close': function(){}
-            });
         }
     });
 
@@ -89,14 +72,17 @@ odoo.define('mail_move_message.relocate', function (require) {
             var self = this;
             _.each(notifications, function (notification) {
                 var model = notification[0][1];
-                var message_id = notification[1].message_ids[0];
+                var message_id = notification[1].id;
                 var message = base_obj.chat_manager.get_message(message_id);
-                if (model === 'mail_move_message') {
-                    // Mark message as moved after move and for update cache
-                    message.is_moved = notification[1].values.is_moved;
+                if (model === 'mail_move_message' && message) {
+                    message.res_id = notification[1].res_id;
+                    message.model = notification[1].model;
+                    message.record_name = notification[1].record_name;
+                    // Mark message as moved after move
+                    message.is_moved = notification[1].is_moved;
                     // Update cache and accordingly message in the thread
                     self.add_to_cache(message, []);
-                    // Call ChatAction.on_update_message(message)
+                    // Call thread.on_update_message(message)
                     chat_manager.bus.trigger('update_message', message);
                 } else if (model === 'mail_move_message.delete_message') {
                     self.remove_from_cache(message, []);
