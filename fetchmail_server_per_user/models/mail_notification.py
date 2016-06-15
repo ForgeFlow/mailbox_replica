@@ -19,10 +19,10 @@
 #
 ##############################################################################
 
-from openerp.osv import orm, fields
+from openerp import models
 
 
-class MailNotification(orm.Model):
+class MailNotification(models.Model):
     _inherit = 'mail.notification'
 
     def get_partners_to_notify(self, cr, uid, message, partners_to_notify=None, context=None):
