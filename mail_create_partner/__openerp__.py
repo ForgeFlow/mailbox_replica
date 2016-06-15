@@ -7,6 +7,7 @@
     'depends' : ['mail'],
     'data':[
         'views/mail_create_partner_view.xml',
+        'views/mail_create_partner_assets.xml',
         ],
     'js': [
         'static/src/js/mail_create_partner.js',
