@@ -18,39 +18,31 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp.osv import fields, orm
+from openerp import fields, models
 from openerp.tools import html2plaintext
 
 
-class MailMessageExternal(orm.Model):
+class MailMessageExternal(models.Model):
     _name = 'mail.message.external'
     _description = 'External Mail Message'
     _inherit = ['mail.thread']
 
-    _columns = {
-        'name': fields.char('Subject', size=64, required=True, select=1),
-        'description': fields.text('Notes'),
-        'email_from': fields.char(
-            'Email From', size=128,
-            help="From", select=1),
-        'email_to': fields.char(
-            'Email To', size=252,
-            help="To", select=1),
-        'email_cc': fields.text(
-            'CC', size=252,
-            help="These email addresses will be "
+    name = fields.Char('Subject', size=64, required=True, select=1)
+    description = fields.Text('Notes')
+    email_from = fields.Char('Email From', size=128, help="From", select=1)
+    email_to = fields.Char('Email To', size=252,help="To", select=1)
+    email_cc = fields.Text('CC', size=252,help="These email addresses will be "
                  "added to the CC field of all inbound "
                  "and outbound emails for this record "
                  "before being sent. "
                  "Separate multiple email addresses with a "
-                 "comma"),
-        'create_date': fields.datetime('Creation Date', readonly=True),
-        'partner_id': fields.many2one('res.partner', 'Partner',
+                 "comma")
+    create_date = fields.Datetime('Creation Date', readonly=True)
+    partner_id = fields.Many2one('res.partner', 'Partner',
                                       ondelete='set null',
                                       select=True,
                                       help="Linked partner "
-                                           "(optional)."),
-    }
+                                           "(optional).")
 
     def message_new(self, cr, uid, msg, custom_values=None, context=None):
         """ Overrides mail_thread message_new that is called by the mailgateway
