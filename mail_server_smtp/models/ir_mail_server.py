@@ -19,22 +19,16 @@
 #
 ##############################################################################
 import logging
-from openerp.osv import fields, orm
+from openerp import fields, models
 
 
 _logger = logging.getLogger(__name__)
 
 
-class ir_mail_server(orm.Model):
+class ir_mail_server(models.Model):
     _inherit = 'ir.mail_server'
-
-    _columns = {
-        'user_id': fields.many2one('res.users', string='Owner'),
-    }
 
     def _get_current_user(self, cr, uid, context=None):
         return uid
 
-    _defaults = {
-        'user_id': _get_current_user,
-    }
+    user_id =fields.Many2one('res.users', string='Owner', default= _get_current_user)

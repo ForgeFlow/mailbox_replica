@@ -1,13 +1,10 @@
-from openerp.osv import orm, fields
+from openerp import models, fields
 
 
-class MailMail(orm.Model):
+class MailMail(models.Model):
     _inherit = 'mail.mail'
 
-    _columns = {
-        'recipient_ids': fields.many2many('res.partner',
-                                          string='To (Partners)'),
-    }
+    recipient_ids = fields.Many2many('res.partner', string='To (Partners)')
 
     def send(self, cr, uid, ids, auto_commit=False, recipient_ids=None,
              context=None):
