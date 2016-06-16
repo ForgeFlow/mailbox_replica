@@ -5,7 +5,7 @@
     'license': 'LGPL-3',
     'category' : 'Discuss',
     'website' : 'https://twitter.com/yelizariev',
-    'price': 9.00,
+    'price': 100.00,
     'currency': 'EUR',
     'depends' : ['mail_all', 'web_polymorphic_field'],
     'images': ['images/inbox.png'],
