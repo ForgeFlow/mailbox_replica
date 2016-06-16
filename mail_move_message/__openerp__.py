@@ -2,7 +2,7 @@
     'name' : 'Mail relocation',
     'version' : '1.0.4',
     'author' : 'IT-Projects LLC, Ivan Yelizariev, Pavel Romanchenko',
-    'license': 'LGPL-3',
+    'license' : 'LGPL-3',
     'category' : 'Discuss',
     'website' : 'https://twitter.com/yelizariev',
     'price': 100.00,
