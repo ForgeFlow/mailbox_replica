@@ -22,15 +22,9 @@
             <field name="groups_id" eval="[(6, 0, [ref('fetchmail_server_per_user.group_email_server')])]"/>
             <field name="sequence">21</field>
             <field name="arch" type="xml">
-                <xpath expr="//group[@string='Security and Authentication']" position="replace">
-                     <group string="Security and Authentication" colspan="4">
-                        <field name="smtp_encryption" on_change="on_change_encryption(smtp_encryption)"/>
-                        <field name="user_id" groups="base.group_no_one"/>
-                        <field name="smtp_user" />
-                        <field name="smtp_pass" password="True"/>
-                        <button name="test_smtp_connection" type="object" string="Test Connection" icon="gtk-network"/>
-                    </group>
-                </xpath>
+                <field name="user_id" position="attributes">
+                    <attribute name="groups">base.group_no_one</attribute>
+                </field>
             </field>
         </record>
 

@@ -32,6 +32,7 @@
                 'base',
                 'mail',
                 'fetchmail',
+                'tko_mail_smtp_per_user'
                 ],
     'data': [
              'views/ir_mail_server_view.xml',
