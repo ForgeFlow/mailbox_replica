@@ -29,16 +29,8 @@
             <field name="groups_id" eval="[(6, 0, [ref('group_email_server')])]"/>
             <field name="sequence">21</field>
             <field name="arch" type="xml">
-                <xpath expr="//notebook/page[@string='Advanced']" position="replace">
-                    <page string="Advanced"  groups="base.group_no_one">
-                        <group string="Advanced Options" col="4">
-                            <field name="priority"/>
-                            <field name="attach"/>
-                            <field name="original"/>
-                            <field name="active"/>
-                            <field name="user_id" />
-                        </group>
-                    </page>
+                <xpath expr="//notebook/page[@string='Advanced']" position="attributes">
+                    <attribute name="groups">base.group_no_one</attribute>
                 </xpath>
             </field>
         </record>
