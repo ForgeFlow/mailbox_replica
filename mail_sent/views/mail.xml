@@ -24,6 +24,36 @@
         </field>
     </record>
 
+    <record id="mail.action_mail_inbox_feeds" model="ir.actions.client">
+        <field name="name">Inbox</field>
+        <field name="tag">mail.wall</field>
+        <field name="res_model">mail.message</field>
+        <field name="context">{
+          'default_model': 'res.users',
+          'default_res_id': uid,
+          'needaction_menu_ref': ['mail.mail_tomefeeds', 'mail.mail_starfeeds']
+        }</field>
+        <field name="params" eval="&quot;{
+            'domain': [
+              ('to_read', '=', True),
+              ('starred', '=', False),
+              ('author_id', 'not in', [uid]),
+            ],
+            'view_mailbox': True,
+            'view_inbox': True,
+            'read_action': 'read'
+        }&quot;"/>
+        <field name="help" type="html">
+            <p>
+                <b>Good Job!</b> Your inbox is empty.
+            </p><p>
+                Your inbox contains private messages or emails sent to you
+                as well as information related to documents or people you
+                follow.
+            </p>
+        </field>
+    </record>
+
     <menuitem id="menu"
               action="action"
               parent="mail.mail_feeds"
