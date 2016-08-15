@@ -16,13 +16,13 @@ odoo.define('mail_move_message.relocate', function (require) {
     thread.include({
         init: function(){
             this._super.apply(this, arguments);
-            // Add click reaction in the events of the thread object
-            this.events['click .oe_move'] = function(event) {
-                var message_id = $(event.currentTarget).data('message-id');
-                this.trigger("move_message", message_id);
-            }
+            this.$('.oe_move').on('click', this.on_move_message);
         },
-        on_move_message: function(message_id){
+        on_move_message: function(event){
+            var self = this;
+            var context = {
+                'default_message_id': this.id
+            };
             var action = {
                 name: _t('Relocate Message'),
                 type: 'ir.actions.act_window',
@@ -37,26 +37,6 @@ odoo.define('mail_move_message.relocate', function (require) {
             this.do_action(action, {
                 'on_close': function(){}
             });
-        }
-    });
-
-    chatter.include({
-        start: function() {
-            var result = this._super.apply(this, arguments);
-            // For show wizard in the form
-            this.thread.on('move_message', this, this.thread.on_move_message);
-            return $.when(result).done(function() {});
-        }
-    });
-
-
-    var ChatAction = core.action_registry.get('mail.chat.instant_messaging');
-    ChatAction.include({
-        start: function() {
-            var result = this._super.apply(this, arguments);
-            // For show wizard in the channels
-            this.thread.on('move_message', this, this.thread.on_move_message);
-            return $.when(result).done(function() {});
         }
     });
 
@@ -96,27 +76,22 @@ odoo.define('mail_move_message.relocate', function (require) {
         on_click: function(){
             if(this.node.attrs.special == 'quick_create'){
                 var self = this;
-                var related_field = this.field_manager.fields[this.node.attrs['field']];
+                var related_field = this.field_manager.fields[this.node.attrs.field];
                 var context_built = $.Deferred();
                 if(this.node.attrs.use_for_mail_move_message) {
-                    var model = new Model(this.view.dataset.model);
-                    var partner_id = self.field_manager.fields['partner_id'].get_value();
-                    var message_name_from = self.field_manager.fields['message_name_from'].get_value();
-                    var message_email_from = self.field_manager.fields['message_email_from'].get_value();
-                    context_built = model.call('create_partner', [
-                            self.view.dataset.context.default_message_id,
-                            related_field.field.relation,
-                            partner_id,
-                            message_name_from,
-                            message_email_from
-                        ]);
+                    var model = new session.web.Model(this.view.dataset.model);
+                    var partner_id = self.field_manager.fields.partner_id.get_value();
+                    var message_name_from = self.field_manager.fields.message_name_from.get_value();
+                    var message_email_from = self.field_manager.fields.message_email_from.get_value();
+                    context_built = model.call('create_partner', [self.view.dataset.context.default_message_id,
+                        related_field.field.relation, partner_id, message_name_from, message_email_from]);
                 }
                 else {
                     context_built.resolve(this.build_context());
                 }
                 $.when(context_built).pipe(function (context) {
                     if(self.node.attrs.use_for_mail_move_message) {
-                        self.field_manager.fields['partner_id'].set_value(context['partner_id']);
+                        self.field_manager.fields.partner_id.set_value(context.partner_id);
                     }
                     var dialog = new form_common.FormViewDialog(self, {
                         res_model: related_field.field.relation,
@@ -130,8 +105,8 @@ odoo.define('mail_move_message.relocate', function (require) {
                     });
                     dialog.on('create_completed', self, function(id) {
                         related_field.set_value(id);
-                        if(self.field_manager.fields['filter_by_partner']) {
-                            self.field_manager.fields['filter_by_partner'].set_value(true);
+                        if(self.field_manager.fields.filter_by_partner) {
+                            self.field_manager.fields.filter_by_partner.set_value(true);
                         }
                     });
                 });
@@ -141,4 +116,5 @@ odoo.define('mail_move_message.relocate', function (require) {
             }
         }
     });
-});
+
+};
