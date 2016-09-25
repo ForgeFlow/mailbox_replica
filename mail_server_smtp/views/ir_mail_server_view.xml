@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record model="ir.ui.view" id="ir_mail_server_list_messaging">
+            <field name="model">ir.mail_server</field>
+            <field name="arch" type="xml">
+                <tree string="Outgoing Mail Servers">
+                    <field name="sequence"/>
+                    <field name="name"/>
+                    <field name="smtp_host"/>
+                    <field name="smtp_user"/>
+                    <field name="smtp_encryption"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="ir_mail_server_form_messaging">
+            <field name="name">ir.mail.server.form</field>
+            <field name="model">ir.mail_server</field>
+            <field name="inherit_id" ref="tko_mail_smtp_per_user.ir_mail_server_form"/>
+            <field name="groups_id" eval="[(6, 0, [ref('fetchmail_server_per_user.group_email_server')])]"/>
+            <field name="sequence">21</field>
+            <field name="arch" type="xml">
+                <field name="user_id" position="attributes">
+                    <attribute name="groups">base.group_no_one</attribute>
+                </field>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_ir_mail_server_messaging">
+            <field name="name">Outgoing Mail Server</field>
+            <field name="res_model">ir.mail_server</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="ir_mail_server_list_messaging"/>
+            <field name="domain">[('user_id','=', uid)]</field>
+        </record>
+
+        <record model="ir.actions.act_window.view" id="action_ir_mail_server_list_messaging">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="ir_mail_server_list_messaging"/>
+            <field name="act_window_id" ref="action_ir_mail_server_messaging"/>
+        </record>
+
+        <record model="ir.actions.act_window.view" id="action_ir_mail_server_form_messaging">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="ir_mail_server_form_messaging"/>
+            <field name="act_window_id" ref="action_ir_mail_server_messaging"/>
+        </record>
+
+        <menuitem
+            parent="mail.mail_feeds"
+            id="menu_action_fetchmail_server_messaging"
+            action="action_ir_mail_server_messaging"
+            name="Outgoing Mail Server"
+            sequence="21"
+            groups="fetchmail_server_per_user.group_email_server"
+        />
+
+
+    </data>
+</openerp>
