@@ -348,6 +348,16 @@ class MailMessage(models.Model):
         res['is_moved'] = message.is_moved
         return res
 
+    @api.multi
+    def message_format(self):
+        message_values = super(MailMessage, self).message_format()
+        message_index = {message['id']: message for message in message_values}
+        for item in self:
+            msg = message_index.get(item.id)
+            if msg:
+                msg['is_moved'] = item.is_moved
+        return message_values
+
 
 class MailMoveMessageConfiguration(models.TransientModel):
     _name = 'mail_move_message.config.settings'
