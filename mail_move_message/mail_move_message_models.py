@@ -332,12 +332,8 @@ class MailMessage(models.Model):
     def name_get(self):
         context = self.env.context
         if not (context or {}).get('extended_name'):
-            return super(MailMessage, self).name_get(cr, uid, ids, context=context)
-        if isinstance(ids, (list, tuple)) and not len(ids):
-            return []
-        if isinstance(ids, (long, int)):
-            ids = [ids]
-        reads = self.read(cr, uid, ids, ['record_name', 'model', 'res_id'], context=context)
+            return super(MailMessage, self).name_get()
+        reads = self.read(['record_name', 'model', 'res_id'])
         res = []
         for record in reads:
             name = record['record_name'] or ''
