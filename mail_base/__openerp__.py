@@ -4,9 +4,10 @@
     "summary": """Makes Mail extendable""",
     "category": "Discuss",
     "images": [],
-    "version": "1.0.0",
+    "version": "1.0.1",
 
     "author": "IT-Projects LLC, Pavel Romanchenko",
+    "support": "apps@it-projects.info",
     "website": "https://it-projects.info",
     "license": "LGPL-3",
     'price': 9.00,

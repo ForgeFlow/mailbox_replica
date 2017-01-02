@@ -241,8 +241,7 @@ var MailTools = core.Class.extend({
             subtype_description: data.subtype_description,
             is_author: data.author_id && data.author_id[0] === session.partner_id,
             is_note: data.is_note,
-            is_system_notification: data.message_type === 'notification' && data.model === 'mail.channel'
-                || data.info === 'transient_message',
+            is_system_notification: data.message_type === 'notification' && data.model === 'mail.channel' || data.info === 'transient_message',
             attachment_ids: data.attachment_ids || [],
             subject: data.subject,
             email_from: data.email_from,
@@ -418,6 +417,12 @@ var MailTools = core.Class.extend({
         });
     },
 
+    clear_cache_all_channels: function(){
+        _.each(channels, function(channel){
+            channel.cache = {};
+        });
+    },
+
     add_to_cache: function (message, domain) {
         _.each(message.channel_ids, function (channel_id) {
             var channel = chat_manager.get_channel(channel_id);
@@ -552,6 +557,14 @@ var MailTools = core.Class.extend({
             } else if (model === 'bus.presence') {
                 // update presence of users
                 chat_manager.mail_tools.on_presence_notification(notification[1]);
+            } else if (model === 'mail_base.mail_sent') {
+                // Delete cache in order to fetch new message
+
+                // TODO find a solution without deleting cache. Currently
+                // problem is that on inheriting send_mail in
+                // mail.compose.message it's not possible to get id of new
+                // message
+                chat_manager.mail_tools.clear_cache_all_channels();
             }
         });
     },
@@ -1118,9 +1131,9 @@ function init () {
     });
 
     // unsubscribe and then subscribe to the event, to avoid duplication of new messages
-    bus.off('notification')
+    bus.off('notification');
     bus.on('notification', null, function(){
-        chat_manager.mail_tools.on_notification.apply(chat_manager.mail_tools, arguments)
+        chat_manager.mail_tools.on_notification.apply(chat_manager.mail_tools, arguments);
     });
 
     return session.rpc('/mail/client_action').then(function (result) {
