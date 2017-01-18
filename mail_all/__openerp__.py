@@ -7,6 +7,7 @@
     "version": "1.0.0",
 
     "author": "IT-Projects LLC, Pavel Romanchenko",
+    "support": "apps@it-projects.info",
     "website": "https://it-projects.info",
     "license": "GPL-3",
     "price": 40.00,
