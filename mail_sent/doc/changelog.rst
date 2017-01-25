@@ -1,7 +1,7 @@
-.. _changelog:
+`1.0.4`
+-------
 
-Updates
-=======
+- **FIX:** didn't work for non-admin users
 
 `1.0.2`
 -------
