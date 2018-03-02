@@ -5,17 +5,16 @@ import email
 import xmlrpclib
 import logging
 from email.message import Message
-from openerp import api, models
-from openerp.addons.mail.models.mail_message import decode
+from openerp.osv import orm
+from openerp.addons.mail.mail_message import decode
 
 _logger = logging.getLogger(__name__)
 
 
-class MailThread(models.AbstractModel):
+class MailThread(orm.AbstractModel):
     _inherit = 'mail.thread'
 
-    @api.model
-    def message_parse_basic_data(self, message):
+    def message_parse_basic_data(self, cr, uid, message, context):
         """Parses a string or email.message.Message representing an RFC-2822
         email, and returns a generic dict holding the message details.
 
@@ -56,10 +55,9 @@ class MailThread(models.AbstractModel):
         msg_dict['email_from'] = decode(message.get('from'))
         return msg_dict
 
-    @api.model
-    def message_process(self, model, message, custom_values=None,
+    def message_process(self, cr, uid, model, message, custom_values=None,
                         save_original=False, strip_attachments=False,
-                        thread_id=None):
+                        thread_id=None, context=None):
 
         if isinstance(message, xmlrpclib.Binary):
             message = str(message.data)
@@ -68,12 +66,12 @@ class MailThread(models.AbstractModel):
         if isinstance(message, unicode):
             message = message.encode('utf-8')
         msg_txt = email.message_from_string(message)
-        msg = self.message_parse_basic_data(msg_txt)
+        msg = self.message_parse_basic_data(cr, uid, msg_txt, context)
         _logger.info(
             'Fetched mail from %s to %s with Message-Id %s',
             msg.get('from'), msg.get('to'), msg.get('message_id'))
 
         return super(MailThread, self).message_process(
-            model, message, custom_values=custom_values,
-            save_original=save_original,
-            strip_attachments=strip_attachments, thread_id=thread_id)
+            cr, uid, model, message, custom_values, save_original,
+            strip_attachments, thread_id, context)
+
