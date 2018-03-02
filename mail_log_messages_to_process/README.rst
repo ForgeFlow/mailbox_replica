@@ -31,6 +31,7 @@ Contributors
 ------------
 
 * Jordi Ballester <jordi.ballester@eficent.com>
+* Aaron Henriquez <aaron.henriquez@eficent.com>
 
 Maintainer
 ----------
