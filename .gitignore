@@ -1,3 +1,7 @@
+# Project specific
+oca.cfg
+.pytest_cache/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -9,12 +13,12 @@ __pycache__/
 # Distribution / packaging
 .Python
 env/
+bin/
 build/
 develop-eggs/
 dist/
 downloads/
 eggs/
-.eggs/
 lib/
 lib64/
 parts/
@@ -23,6 +27,7 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
+*.eggs
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -38,7 +43,6 @@ pip-delete-this-directory.txt
 htmlcov/
 .tox/
 .coverage
-.coverage.*
 .cache
 nosetests.xml
 coverage.xml
@@ -49,8 +53,28 @@ coverage.xml
 *.mo
 *.pot
 
+# Pycharm
+.idea
+
+# Eclipse
+.settings
+
+# Visual Studio cache/options directory
+.vs/
+
+# OSX Files
+.DS_Store
+
 # Django stuff:
 *.log
+
+# Mr Developer
+.mr.developer.cfg
+.project
+.pydevproject
+
+# Rope
+.ropeproject
 
 # Sphinx documentation
 docs/_build/
@@ -60,3 +84,10 @@ target/
 
 #Ipython Notebook
 .ipynb_checkpoints
+
+# Backup files
+*~
+*.swp
+
+# OCA rules
+!static/lib/
