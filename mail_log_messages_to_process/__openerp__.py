@@ -12,5 +12,5 @@
     'license': 'AGPL-3',
     'website': 'https://github.com/OCA/server-tools',
     'depends': ['mail'],
-    'installable': True,
+    'installable': False,
 }
