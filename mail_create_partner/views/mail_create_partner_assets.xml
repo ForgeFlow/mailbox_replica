@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data>
+<odoo>
 
         <template id="assets_backend" name="mail assets" inherit_id="web.assets_backend">
             <xpath expr="." position="inside">
                 <link rel="stylesheet" href="/mail_create_partner/static/src/css/mail_create_partner.css"/>
-                <script type="text/javascript" src="/mail_create_partner/static/src/js/mail_create_partner.js"></script>
+                <script type="text/javascript" src="/mail_create_partner/static/src/js/mail_create_partner.js"/>
             </xpath>
         </template>
 
-    </data>
-</openerp>
+</odoo>

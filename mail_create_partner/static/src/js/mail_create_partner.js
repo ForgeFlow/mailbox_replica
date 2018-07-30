@@ -1,19 +1,28 @@
-openerp.mail_create_partner = function (session) {
-    var _t = session.web._t,
-       _lt = session.web._lt;
+odoo.define('mail_create_partner.create_partner_object', function (require) {
+    "use strict";
 
-    var mail = session.mail;
+    var chat_manager = require('mail.chat_manager');
+    var base_obj = require('mail_base.base');
+    var thread = require('mail.ChatThread');
+    var chatter = require('mail.Chatter');
+    var Model = require('web.Model');
+    var form_common = require('web.form_common');
+    var widgets = require('web.form_widgets');
+    var core = require('web.core');
 
-    mail.ThreadMessage.include({
-        bind_events: function(){
+    var _t = core._t;
+
+    thread.include({
+        init: function(){
             this._super.apply(this, arguments);
-            this.$('.oe_create_partner').on('click', this.on_create_partner)
+            // Add click reaction in the events of the thread object
+            this.events['click .oe_create_partner'] = function(event) {
+                var message_id = $(event.currentTarget).data('message-id');
+                this.trigger("create_partner", message_id);
+            };
         },
-        on_create_partner: function(event){
-            var self = this;
-            var context = {
-                'default_message_id': this.id
-            }
+
+        on_create_partner: function(message_id){
             var action = {
                 name: _t('Create Partner'),
                 type: 'ir.actions.act_window',
@@ -22,55 +31,73 @@ openerp.mail_create_partner = function (session) {
                 view_type: 'form',
                 views: [[false, 'form']],
                 target: 'new',
-                context: context,
+                context: {'default_message_id': message_id}
             };
 
             self.do_action(action, {
                 'on_close': function(){
-                    self.check_for_rerender();
+                    var message = base_obj.chat_manager.get_message(self.message_id);
+                    chat_manager.bus.trigger('update_message', message);
+                    self.fetch_and_render_thread();
                 }
             });
         }
-    })
+    });
 
-    mail.MessageCommon.include({
-        init: function (parent, datasets, options) {
-            this._super(parent, datasets, options);
-            this.no_author = true;
-            this.author_id == datasets.author_id || false
-            if (this.author_id != false) {
-                if (this.author_id[0] == 0) {
-                    this.no_author = true;
+    chatter.include({
+        start: function() {
+            var result = this._super.apply(this, arguments);
+            // For show wizard in the form
+            this.thread.on('create_partner', this, this.thread.on_create_partner);
+            return $.when(result).done(function() {});
+        }
+    });
+
+    var ChatAction = core.action_registry.get('mail.chat.instant_messaging');
+    ChatAction.include({
+        start: function() {
+            var result = this._super.apply(this, arguments);
+            // For show wizard in the channels
+            this.thread.on('create_partner', this, this.thread.on_create_partner);
+            return $.when(result).done(function() {});
+        }
+    });
+
+    base_obj.MailTools.include({
+        make_message: function(data){
+            var msg = this._super(data);
+            msg.no_author = true;
+            msg.author_id == data.author_id || false
+            if (msg.author_id != false) {
+                if (msg.author_id[0] == 0) {
+                    msg.no_author = true;
                 } else {
-                    this.no_author = false;
+                    msg.no_author = false;
                 }
             }
-
+            return msg;
         }
-    })
+    });
 
-    session.web.form.WidgetButton.include({
-        on_click: function() {
+    widgets.WidgetButton.include({
+        on_click: function(){
             if(this.node.attrs.special == 'quick_create_partner'){
                 var self = this;
                 var related_field = this.field_manager.fields[this.node.attrs['field']];
                 var context_built = $.Deferred();
                 context_built.resolve(this.build_context());
                 $.when(context_built).pipe(function (context) {
-                    var pop = new session.web.form.FormOpenPopup(this);
-                    pop.show_element(
-                        related_field.field.relation,
-                        false,
-                        context,
-                        {
-                            title: _t("Create new record"),
-                        }
-                    );
-                    pop.on('closed', self, function () {
+                    var dialog = new form_common.FormViewDialog(self, {
+                        res_model: related_field.field.relation,
+                        res_id: false,
+                        context: context,
+                        title: _t("Create new record")
+                    }).open();
+                    dialog.on('closed', self, function () {
                         self.force_disabled = false;
                         self.check_disable();
                     });
-                    pop.on('create_completed', self, function(id) {
+                    dialog.on('create_completed', self, function(id) {
                         related_field.set_value(id);
                     });
                 });
@@ -78,7 +105,6 @@ openerp.mail_create_partner = function (session) {
             else {
                 this._super.apply(this, arguments);
             }
-        },
+        }
     });
-
-}
+});

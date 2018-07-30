@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data>
+<odoo>
 
         <record id="mail_create_partner_wizard_view" model="ir.ui.view">
             <field name="name">mail_create_partner.wizard.view</field>
             <field name="model">mail_create_partner.wizard</field>
             <field name="arch" type="xml">
-                <form string="Create Partner" version="7.0">
+                <form string="Create Partner">
                     <field name="can_create_partner" invisible="1"/>
                     <p attrs="{'invisible':[('can_create_partner', '!=', False)]}">You cannot create the partner. It has already been created.</p>
                     <group attrs="{'invisible':[('can_create_partner', '=', False)]}" colspan="2">
@@ -15,14 +14,13 @@
                         <field name="message_email_from"/>
                     </group>
                     <button string="Create Partner" class="oe_highlight"
-                                special="quick_create_partner"
-                                field="partner_id"
-                                attrs="{'invisible':['|', ('can_create_partner', '=', False), ('partner_id', '!=', False)]}"
-                                context="{'force_email':True, 'default_email':message_email_from,'default_name':message_name_from, 'update_message_author':True}"/>
+                            special="quick_create_partner"
+                            field="partner_id"
+                            attrs="{'invisible':['|', ('can_create_partner', '=', False), ('partner_id', '!=', False)]}"
+                            context="{'force_email':True, 'default_email':message_email_from,'default_name':message_name_from, 'update_message_author':True}"/>
                     <button special="cancel" string="Close" class="oe_link"/>
                 </form>
             </field>
         </record>
 
-    </data>
-</openerp>
+</odoo>
