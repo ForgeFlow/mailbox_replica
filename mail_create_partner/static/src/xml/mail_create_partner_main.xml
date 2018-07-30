@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <template>
-    <t t-extend="mail.thread.message">
-        <t t-jquery=".oe_msg_icons span:first-child()" t-operation="after">
-            <span
-                    t-attf-class="oe_create_partner #{widget.no_author?'oe_has_author':''}">
-                <a title="Create Partner" class="oe_e">C</a></span>
+    <t t-extend="mail.ChatThread.Message">
+        <t t-jquery="p.o_mail_info span:nth-child(2) i:first-child()" t-operation="before">
+            <i t-if="!message.is_system_notification"
+            t-att-class="'fa fa-lg oe_create_partner ' + (message.no_author ? 'fa-tag' : 'fa-tag-o')"
+            t-att-data-message-id="message.id" title="Create Partner"/>
         </t>
     </t>
 </template>
