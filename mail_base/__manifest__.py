@@ -1,23 +1,15 @@
 # -*- coding: utf-8 -*-
 {
     "name": "Mail Base",
-    "summary": """Makes Mail extendable""",
+    "summary": "Makes Mail extendable",
     "category": "Discuss",
-    "images": [],
-    "version": "1.0.4",
-
+    "version": "10.0.1.0.0",
     "author": "IT-Projects LLC, Pavel Romanchenko",
-    "support": "apps@it-projects.info",
-    "website": "https://it-projects.info",
+    "website": "https://github.com/Eficent/mailbox_replica/tree/10.0",
     "license": "LGPL-3",
-    'price': 9.00,
-    'currency': 'EUR',
-
     "depends": [
-        "base",
-        "mail"
+        "base", "mail",
     ],
-
     "data": [
         "views/templates.xml",
     ],
