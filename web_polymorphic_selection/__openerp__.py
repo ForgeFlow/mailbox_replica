@@ -17,7 +17,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 #
-{'name': 'Web Polymorphic Field',
+{'name': 'Web Polymorphic Selection',
  'version': '0.2',
  'category': 'Web',
  'depends': ['web'],
