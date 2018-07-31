@@ -24,7 +24,7 @@
  'author': 'Augustin Cisterne-Kaas',
  'license': 'GPL-3',
  'data': [
-     'views/web_polymorphic_field.xml'
+     'views/web_polymorphic_selection.xml'
  ],
  'js': [
      'static/src/js/view_form.js'
