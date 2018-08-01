@@ -1,25 +1,9 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#
-#    Copyright (C) 2014 Eficent (<http://www.eficent.com/>)
-#               <jordi.ballester@eficent.com>
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as
-#    published by the Free Software Foundation, either version 3 of the
-#    License, or (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
-from openerp import fields, models
-from openerp.tools import html2plaintext
+# Copyright 2014 Eficent (<http://www.eficent.com/>)
+#             <contact@eficent.com>
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
+from odoo import api, fields, models, _
+from odoo.tools.mail import html2plaintext
 
 
 class MailMessageExternal(models.Model):
@@ -27,41 +11,42 @@ class MailMessageExternal(models.Model):
     _description = 'External Mail Message'
     _inherit = ['mail.thread']
 
-    name = fields.Char('Subject', size=64, required=True, select=1)
-    description = fields.Text('Notes')
+    name = fields.Char(string='Subject', size=64, required=True, select=1)
+    description = fields.Text(string='Notes')
     email_from = fields.Char('Email From', size=128, help="From", select=1)
-    email_to = fields.Char('Email To', size=252,help="To", select=1)
-    email_cc = fields.Text('CC', size=252,help="These email addresses will be "
-                 "added to the CC field of all inbound "
-                 "and outbound emails for this record "
-                 "before being sent. "
-                 "Separate multiple email addresses with a "
-                 "comma")
-    create_date = fields.Datetime('Creation Date', readonly=True)
-    partner_id = fields.Many2one('res.partner', 'Partner',
-                                      ondelete='set null',
-                                      select=True,
-                                      help="Linked partner "
-                                           "(optional).")
+    email_to = fields.Char(string='Email To', size=252, help="To", select=1)
+    email_cc = fields.Text(string='CC', size=252,
+                           help="These email addresses will be "
+                                "added to the CC field of all inbound "
+                                "and outbound emails for this record "
+                                "before being sent. "
+                                "Separate multiple email addresses with a "
+                                "comma")
+    create_date = fields.Datetime(string='Creation Date', readonly=True)
+    partner_id = fields.Many2one(comodel_name='res.partner', string='Partner',
+                                 ondelete='set null',
+                                 select=True,
+                                 help="Linked partner (optional).")
 
-    def message_new(self, cr, uid, msg, custom_values=None, context=None):
+    @api.model
+    def message_new(self, msg_dict, custom_values=None):
         """ Overrides mail_thread message_new that is called by the mailgateway
             through message_process.
             This override updates the document according to the email.
         """
         if custom_values is None:
             custom_values = {}
-        desc = html2plaintext(msg.get('body')) if msg.get('body') else ''
+        desc = html2plaintext(msg_dict.get('body')) if msg_dict.get('body') \
+            else ''
         defaults = {
-            'name':  msg.get('subject') or _("No Subject"),
+            'name':  msg_dict.get('subject') or _("No Subject"),
             'description': desc,
-            'email_from': msg.get('from'),
-            'email_to': msg.get('to'),
-            'email_cc': msg.get('cc'),
-            'partner_id': msg.get('author_id', False),
+            'email_from': msg_dict.get('from'),
+            'email_to': msg_dict.get('to'),
+            'email_cc': msg_dict.get('cc'),
+            'partner_id': msg_dict.get('author_id', False),
             'user_id': False,
         }
         defaults.update(custom_values)
         return super(MailMessageExternal, self).message_new(
-            cr, uid, msg, custom_values=defaults,
-            context=context)
+            msg_dict=msg_dict, custom_values=defaults)
