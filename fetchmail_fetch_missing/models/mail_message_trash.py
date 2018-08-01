@@ -5,13 +5,13 @@
 #           <http://www.eficent.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from openerp import api, fields, models
+from odoo import fields, models
 
 
 class MailMessageTrash(models.Model):
-
     _name = "mail.message.trash"
     _description = "Deleted Mail Messages"
 
-    message_id = fields.Char('Message-Id', help='Message unique identifier',
+    message_id = fields.Char(sting='Message-Id',
+                             help='Message unique identifier',
                              index=True, readonly=1, copy=False)
