@@ -6,28 +6,25 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 import logging
-import imaplib
 from datetime import datetime, timedelta
-import time
 import email
-from openerp import api, fields, models
+from odoo import api, fields, models
 
 _logger = logging.getLogger(__name__)
 
 
 class FetchmailServer(models.Model):
-
     _inherit = "fetchmail.server"
 
     nbr_days = fields.Integer(
-        '# Days to fetch',
+        string='# Days to fetch',
         help="Remote emails with a date greater today's date - # days will "
              "be fetched if not already processed",
         default=1)
 
     @api.model
     def _fetch_missing_imap(self, imap_server, count, failed):
-        MailThread = self.env['mail.thread']
+        mail_thread_model = self.env['mail.thread']
         messages = []
         # Retrieve all the message id's stored in odoo
         mail_messages = self.env['mail.message'].search([])
@@ -60,7 +57,7 @@ class FetchmailServer(models.Model):
             result, data = imap_server.fetch(num, '(RFC822)')
             if data and data[0]:
                 try:
-                    res_id = MailThread.message_process(
+                    res_id = mail_thread_model.message_process(
                         self.object_id.model,
                         data[0][1],
                         save_original=self.original,
