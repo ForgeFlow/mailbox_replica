@@ -4,17 +4,16 @@
 
 {
     'name': "SMTP Per User",
-    'version': '1.3.0',
+    'version': '10.0.1.0.0',
     'summary': 'Send letters from Odoo using your own mail',
     'category': 'Mail',
-    'description': """Can configure different mail servers per user""",
     'author': 'Boolit',
     'license': 'LGPL-3',
-    'website': "www.boolit.eu",
-    "depends" : ['mail'],
+    'website': "https://www.github.com/Eficent/mailbox_replica/tree/10.0",
+    "depends": ['mail'],
     'data': [
         'security/ir.model.access.csv',
         'views/smtp_per_user_view.xml',
     ],
-    "installable": True
+    "installable": True,
 }
