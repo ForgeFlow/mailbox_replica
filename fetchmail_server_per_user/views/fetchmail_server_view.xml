@@ -28,11 +28,7 @@
             <field name="inherit_id" ref="fetchmail.view_email_server_form"/>
             <field name="groups_id" eval="[(6, 0, [ref('group_email_server')])]"/>
             <field name="sequence">21</field>
-            <field name="arch" type="xml">
-                <xpath expr="//notebook/page[@string='Advanced']" position="attributes">
-                    <attribute name="groups">base.group_no_one</attribute>
-                </xpath>
-            </field>
+            <field name="arch" type="xml"/>
         </record>
 
         <record model="ir.ui.view" id="view_email_server_form">
@@ -70,7 +66,7 @@
         </record>
 
         <menuitem
-            parent="mail.mail_feeds"
+            parent="base.menu_email"
             id="menu_action_fetchmail_server_messaging"
             action="action_email_server_form_messaging"
             name="Incoming Mail Server"
