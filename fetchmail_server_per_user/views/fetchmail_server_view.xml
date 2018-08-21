@@ -19,20 +19,12 @@
             </field>
         </record>
 
-
         <record model="ir.ui.view" id="view_email_server_form_messaging">
             <field name="name">fetchmail.server.form.messaging</field>
             <field name="model">fetchmail.server</field>
             <field name="inherit_id" ref="fetchmail.view_email_server_form"/>
             <field name="groups_id" eval="[(6, 0, [ref('group_email_server')])]"/>
             <field name="sequence">21</field>
-            <field name="arch" type="xml"/>
-        </record>
-
-        <record model="ir.ui.view" id="view_email_server_form">
-            <field name="name">fetchmail.server.form</field>
-            <field name="model">fetchmail.server</field>
-            <field name="inherit_id" ref="fetchmail.view_email_server_form"/>
             <field name="arch" type="xml">
                 <field name="active" position="after">
                     <field name="user_id"/>
@@ -64,7 +56,7 @@
         </record>
 
         <menuitem
-            parent="base.menu_email"
+            parent="mail.mail_channel_menu_root_chat"
             id="menu_action_fetchmail_server_messaging"
             action="action_email_server_form_messaging"
             name="Incoming Mail Server"
