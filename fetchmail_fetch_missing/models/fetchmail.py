@@ -70,12 +70,11 @@ class FetchmailServer(models.Model):
                         self.name)
                     failed += 1
                 if res_id and self.action_id:
-                    self.action_id.run({
-                        'active_id': res_id,
-                        'active_ids': [res_id],
-                        'active_model': self.env.context.get(
-                            "thread_model", self.object_id.model)
-                    })
+                    self.with_context({'active_id': res_id,
+                                       'active_ids': [res_id],
+                                       'active_model': self.env.context.get(
+                                       "thread_model", self.object_id.model)
+                                       }).action_id.run()
                 imap_server.store(num, '+FLAGS', '\\Seen')
                 self._cr.commit()
                 count += 1
