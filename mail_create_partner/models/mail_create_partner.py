@@ -46,8 +46,8 @@ class MailCreatePartnerWizard(models.TransientModel):
     can_create_partner = fields.Boolean(compute='_compute_can_create_partner',
                                         string='Can move')
     partner_id = fields.Many2one(comodel_name='res.partner', string='Author')
-    message_email_from = fields.Char('Email From')
-    message_name_from = fields.Char('Name From')
+    message_email_from = fields.Char(string='Email From')
+    message_name_from = fields.Char(string='Name From')
 
     def create_partner(self, message_id):
         message = self.env['mail.message'].browse(message_id)
@@ -71,7 +71,7 @@ class MailCreatePartnerWizard(models.TransientModel):
                 'name': message_name_from,
                 'email': message_email_from,
             })
-        context = {'partner_id': partner_id}
+        context = {'partner_id': partner_id.id}
 
         return context
 
@@ -81,7 +81,7 @@ class Partner(models.Model):
 
     @api.model
     def create(self, vals):
-        res_id = super(Partner, self).create(vals).id
+        res_id = super(Partner, self).create(vals)
         if 'update_message_author' in self._context and 'email' in vals:
             mail_message_obj = self.env['mail.message']
             # Escape special SQL characters in email_address to
@@ -95,5 +95,5 @@ class Partner(models.Model):
                 ('author_id', '=', False),
             ])
             if messages:
-                messages.write({'author_id': res_id})
+                messages.write({'author_id': res_id.id})
         return res_id

@@ -8,7 +8,7 @@
     'summary': 'Allows to create a partner from an existing message',
     'author': 'Eficent Business and IT Consulting Services S.L.',
     'category': 'Social Network',
-    'website': 'http://www.eficent.com',
+    'website': 'https://www.github.com/Eficent/mailbox_replica/tree/10.0',
     'depends': ['mail'],
     'data': [
         'views/mail_create_partner_view.xml',
