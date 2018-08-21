@@ -83,7 +83,7 @@
 
         <!-- Add menu entry in Settings/Email -->
         <menuitem name="External Emails" id="menu_mail_message_external"
-                  parent="base.menu_email"
+                  parent="mail.mail_channel_menu_root_chat"
                   action="action_view_mail_message_external" />
 
 </odoo>
