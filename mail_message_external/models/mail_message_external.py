@@ -11,10 +11,10 @@ class MailMessageExternal(models.Model):
     _description = 'External Mail Message'
     _inherit = ['mail.thread']
 
-    name = fields.Char(string='Subject', size=64, required=True, select=1)
+    name = fields.Char(string='Subject', size=64, required=True, index=1)
     description = fields.Text(string='Notes')
-    email_from = fields.Char('Email From', size=128, help="From", select=1)
-    email_to = fields.Char(string='Email To', size=252, help="To", select=1)
+    email_from = fields.Char('Email From', size=128, help="From", index=1)
+    email_to = fields.Char(string='Email To', size=252, help="To", index=1)
     email_cc = fields.Text(string='CC', size=252,
                            help="These email addresses will be "
                                 "added to the CC field of all inbound "
@@ -25,7 +25,7 @@ class MailMessageExternal(models.Model):
     create_date = fields.Datetime(string='Creation Date', readonly=True)
     partner_id = fields.Many2one(comodel_name='res.partner', string='Partner',
                                  ondelete='set null',
-                                 select=True,
+                                 index=1,
                                  help="Linked partner (optional).")
 
     @api.model
