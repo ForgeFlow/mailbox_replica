@@ -23,7 +23,7 @@ class IrMailServer(models.Model):
             old_name, email = parseaddr(old_email)
             return formataddr((self.email_name, email))
         else:
-            return old_email    
+            return old_email
 
 
 class MailMail(models.Model):
