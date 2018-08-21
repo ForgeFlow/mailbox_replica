@@ -39,9 +39,9 @@
             <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="priority" eval="10"/>
             <field name="arch" type="xml">
-                <xpath expr="//div[@name='buttons']" position="inside">
-                    <button type="action" string="Messages"
-                        name="%(action_mail_message_partner)d"/>
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button type="action" string="Messages" class="oe_stat_button"
+                            icon="fa-envelope" name="%(action_mail_message_partner)d"/>
                 </xpath>
             </field>
         </record>
