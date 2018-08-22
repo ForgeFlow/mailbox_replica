@@ -9,16 +9,18 @@
                     <field name="can_create_partner" invisible="1"/>
                     <p attrs="{'invisible':[('can_create_partner', '!=', False)]}">You cannot create the partner. It has already been created.</p>
                     <group attrs="{'invisible':[('can_create_partner', '=', False)]}" colspan="2">
-                        <field name="partner_id" readonly="True"/>
-                        <field name="message_name_from"/>
-                        <field name="message_email_from"/>
+                        <field name="partner_id" readonly="True" attrs="{'invisible': [('partner_id', '=', False)]}"/>
+                        <field name="message_name_from" attrs="{'readonly': [('partner_id', '!=', False)]}"/>
+                        <field name="message_email_from" attrs="{'readonly': [('partner_id', '!=', False)]}"/>
                     </group>
-                    <button string="Create Partner" class="oe_highlight"
-                            special="quick_create_partner"
-                            field="partner_id"
-                            attrs="{'invisible':['|', ('can_create_partner', '=', False), ('partner_id', '!=', False)]}"
-                            context="{'force_email':True, 'default_email':message_email_from,'default_name':message_name_from, 'update_message_author':True}"/>
-                    <button special="cancel" string="Close" class="oe_link"/>
+                    <footer>
+                        <button string="Create Partner" class="oe_highlight"
+                                special="quick_create_partner"
+                                field="partner_id"
+                                attrs="{'invisible':['|', ('can_create_partner', '=', False), ('partner_id', '!=', False)]}"
+                                context="{'force_email':True, 'default_email':message_email_from,'default_name':message_name_from, 'update_message_author':True}"/>
+                        <button special="cancel" string="Close" class="oe_link"/>
+                    </footer>
                 </form>
             </field>
         </record>

@@ -1,6 +1,7 @@
 odoo.define('mail_create_partner.create_partner_object', function (require) {
     "use strict";
 
+    var bus = require('bus.bus').bus;
     var chat_manager = require('mail.chat_manager');
     var base_obj = require('mail_base.base');
     var thread = require('mail.ChatThread');
@@ -31,14 +32,15 @@ odoo.define('mail_create_partner.create_partner_object', function (require) {
                 view_type: 'form',
                 views: [[false, 'form']],
                 target: 'new',
-                context: {'default_message_id': message_id}
+                context: {'default_message_id': message_id},
             };
+            this.message_id = message_id;
 
-            self.do_action(action, {
+            this.do_action(action, {
                 'on_close': function(){
-                    var message = base_obj.chat_manager.get_message(self.message_id);
-                    chat_manager.bus.trigger('update_message', message);
-                    self.fetch_and_render_thread();
+//                    var message = base_obj.chat_manager.get_message(this.message_id);
+//                    chat_manager.bus.trigger('update_message', message);
+//                    this.fetch_and_render_thread();
                 }
             });
         }
@@ -76,6 +78,17 @@ odoo.define('mail_create_partner.create_partner_object', function (require) {
                 }
             }
             return msg;
+        },
+
+        on_notification: function(notifications){
+            this._super(notifications);
+            var self = this;
+            _.each(notifications, function (notification) {
+                var model = notification[0][1];
+                var message_id = notification[1].id;
+                var message = base_obj.chat_manager.get_message(message_id);
+                chat_manager.bus.trigger('update_message', message);
+            });
         }
     });
 

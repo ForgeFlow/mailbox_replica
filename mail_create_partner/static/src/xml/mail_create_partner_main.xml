@@ -3,7 +3,7 @@
     <t t-extend="mail.ChatThread.Message">
         <t t-jquery="p.o_mail_info span:last-child i:first-child()" t-operation="before">
             <i t-if="!message.is_system_notification"
-            t-att-class="'fa fa-lg oe_create_partner ' + (message.no_author ? 'fa-tag' : 'fa-tag-o')"
+            t-att-class="'fa fa-tag oe_create_partner ' + (message.no_author ? 'oe_has_author' : '')"
             t-att-data-message-id="message.id" title="Create Partner"/>
         </t>
     </t>

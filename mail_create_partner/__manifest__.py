@@ -9,7 +9,7 @@
     'author': 'Eficent Business and IT Consulting Services S.L.',
     'category': 'Social Network',
     'website': 'https://www.github.com/Eficent/mailbox_replica/tree/10.0',
-    'depends': ['mail'],
+    'depends': ['mail', 'mail_base'],
     'data': [
         'views/mail_create_partner_view.xml',
         'views/mail_create_partner_assets.xml',
