@@ -1450,17 +1450,6 @@ function init () {
                 emoji_substitutions[_.escape(s.source)] = s.substitution;
             }
         });
-    });
-
-    var ir_model = new Model("ir.model.data");
-    var load_menu_id = ir_model.call("xmlid_to_res_id", ["mail.mail_channel_menu_root_chat"], {}, {shadow: true});
-    var load_action_id = ir_model.call("xmlid_to_res_id", ["mail.mail_channel_action_client_chat"], {}, {shadow: true});
-
-    // unsubscribe and then subscribe to the event, to avoid duplication of new messages
-    bus.off('notification');
-    bus.on('notification', null, function(){
-        chat_manager.mail_tools.on_notification.apply(chat_manager.mail_tools, arguments);
-    });
 
         bus.start_polling();
     });
