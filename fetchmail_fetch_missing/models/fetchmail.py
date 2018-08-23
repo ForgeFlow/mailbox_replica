@@ -78,6 +78,7 @@ class FetchmailServer(models.Model):
                          }).action_id.run()
                 imap_server.store(num, '+FLAGS', '\\Seen')
                 cr = self._cr
+                # pylint: disable=invalid-commit
                 cr.commit()
                 count += 1
         return count, failed
