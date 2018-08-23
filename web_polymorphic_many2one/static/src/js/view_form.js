@@ -31,7 +31,7 @@ odoo.define('web_polymorphic_many2one.FieldPolymorphic', function (require) {
             this._super();
             this.set_polymorphic_event();
             this.set({
-                readonly: true;
+                readonly: true
             });
 
         },

@@ -12,7 +12,7 @@ odoo.define('web_polymorphic_selection.FieldPolymorphic', function (require) {
             this.polymorphic = this.node.attrs.polymorphic;
         },
         add_polymorphism: function(reinit) {
-            if(this.get_value() != false) {
+            if(this.get_value() !== false) {
                 polymorphic_field = this.field_manager.fields[this.polymorphic];
                 polymorphic_field.field.relation = this.get_value();
             }
