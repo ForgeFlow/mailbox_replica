@@ -7,15 +7,15 @@
                     <em>
                     <span>Mails fetched:</span>
                     <a href="#" class="oe_fetch_new_mails" title="Click to fetch mails now">
-                    <span class="oe_view_manager_fetch_mail_imm_field"></span>
+                    <span class="oe_view_manager_fetch_mail_imm_field"/>
                     </a>
                     </em>
                 </div>
             </td>
-            <td></td>
+            <td/>
         </tr>
     </t>
-    <t t-extend="mail.wall">
+    <t t-extend="mail.ChatThread">
         <t t-jquery="tr.oe_header_row_top" t-operation="after">
             <t t-call="fetch_mail_immediately.header">
                 <t t-set="colspan" t-value="2"/>
