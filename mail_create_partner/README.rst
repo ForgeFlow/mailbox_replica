@@ -5,3 +5,5 @@
 ===================
 Mail Create Partner
 ===================
+
+Allows to create a partner from an existing message.
