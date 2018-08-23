@@ -1,4 +1,9 @@
-Check mail immediately
+.. image:: https://img.shields.io/badge/license-LGPL--3-blue.png
+   :target: https://www.gnu.org/licenses/lgpl
+   :alt: License: LGPL-3
+
+======================
+Check Mail Immediately
 ======================
 
-Description: https://apps.odoo.com/apps/modules/8.0/mail_check_immediately/
+Keep your inbox up to date.
