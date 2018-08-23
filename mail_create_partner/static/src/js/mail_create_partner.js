@@ -1,12 +1,10 @@
 odoo.define('mail_create_partner.create_partner_object', function (require) {
     "use strict";
 
-    var bus = require('bus.bus').bus;
     var chat_manager = require('mail.chat_manager');
     var base_obj = require('mail_base.base');
     var thread = require('mail.ChatThread');
     var chatter = require('mail.Chatter');
-    var Model = require('web.Model');
     var form_common = require('web.form_common');
     var widgets = require('web.form_widgets');
     var core = require('web.core');
@@ -69,9 +67,9 @@ odoo.define('mail_create_partner.create_partner_object', function (require) {
         make_message: function(data){
             var msg = this._super(data);
             msg.no_author = true;
-            msg.author_id == data.author_id || false
-            if (msg.author_id != false) {
-                if (msg.author_id[0] == 0) {
+            msg.author_id = data.author_id || false;
+            if (msg.author_id !== false) {
+                if (msg.author_id[0] === 0) {
                     msg.no_author = true;
                 } else {
                     msg.no_author = false;
@@ -82,7 +80,6 @@ odoo.define('mail_create_partner.create_partner_object', function (require) {
 
         on_notification: function(notifications){
             this._super(notifications);
-            var self = this;
             _.each(notifications, function (notification) {
                 var model = notification[0][1];
                 var message_id = notification[1].id;
@@ -94,7 +91,7 @@ odoo.define('mail_create_partner.create_partner_object', function (require) {
 
     widgets.WidgetButton.include({
         on_click: function(){
-            if(this.node.attrs.special == 'quick_create_partner'){
+            if(this.node.attrs.special === 'quick_create_partner'){
                 var self = this;
                 var related_field = this.field_manager.fields[this.node.attrs['field']];
                 var context_built = $.Deferred();
@@ -114,8 +111,7 @@ odoo.define('mail_create_partner.create_partner_object', function (require) {
                         related_field.set_value(id);
                     });
                 });
-            }
-            else {
+            } else {
                 this._super.apply(this, arguments);
             }
         }

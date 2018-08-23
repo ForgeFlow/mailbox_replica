@@ -6,8 +6,6 @@ odoo.define('mail_check_immediately.relocate', function (require) {
     var data = require('web.data');
     var ChatThread = require('mail.ChatThread');
 
-    var _t = core._t;
-
     ChatThread.Thread.include({
 
         init: function(){
@@ -47,8 +45,9 @@ odoo.define('mail_check_immediately.relocate', function (require) {
             var _this = this;
             this.imm_model.call('get_last_update_time', {context: new data.CompoundContext()}).then(function(res){
                 var value;
-                if (res)
+                if (res){
                     value = $.timeago(res);
+                }
                 value = value || 'undefined';
                 _this.$el.find('span.oe_view_manager_fetch_mail_imm_field').html(value);
             });
