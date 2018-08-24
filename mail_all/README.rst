@@ -1,16 +1,16 @@
-===================
- Show all messages
-===================
+.. image:: https://img.shields.io/badge/license-LGPL--3-blue.png
+   :target: https://www.gnu.org/licenses/lgpl
+   :alt: License: LGPL-3
 
-Adds ``Messaging / All messages`` menu, that shows all messages accesable by current user
+========
+Mail All
+========
 
-Further information
--------------------
+Adds ``Discuss / All`` menu, that shows all messages accesable by current user
 
-HTML Description: https://apps.odoo.com/apps/modules/8.0/mail_all/
 
-Usage instructions: `<doc/index.rst>`__
+Usage
+=====
 
-Changelog: `<doc/changelog.rst>`__
-
-Tested on Odoo 8.0 0af32f3f84bae07b11abb8538d02e35c7369a348
+* Open menu ``Messaging / All messages``
+* You see all messages
