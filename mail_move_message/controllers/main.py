@@ -15,7 +15,8 @@ class MailChatController(BusController):
         if request.session.uid:
             channels.append((request.db, 'mail_move_message'))
             channels.append((request.db, 'mail_move_message.delete_message'))
-        return super(MailChatController, self)._poll(dbname, channels, last, options)
+        return super(MailChatController, self)._poll(
+            dbname, channels, last, options)
 
 
 class DataSetCustom(DataSet):
@@ -30,17 +31,21 @@ class DataSetCustom(DataSet):
                 break
         partner_info = {}
         if contact_field:
-            partner_info = Model.browse([r[0] for r in records]).read([contact_field])
-            partner_info = dict([(p['id'], p[contact_field]) for p in partner_info])
+            partner_info = Model.browse([r[0] for r in records]).read(
+                [contact_field])
+            partner_info = dict(
+                [(p['id'], p[contact_field]) for p in partner_info])
         res = []
         for r in records:
             if partner_info.get(r[0]):
-                res.append((r[0], _('%s [%s] ID %s') % (r[1], partner_info.get(r[0])[1], r[0])))
+                res.append((r[0], _('%s [%s] ID %s') % (
+                    r[1], partner_info.get(r[0])[1], r[0])))
             else:
                 res.append((r[0], _('%s ID %s') % (r[1], r[0])))
         return res
 
-    @http.route('/web/dataset/call_kw/<model>/name_search', type='json', auth="user")
+    @http.route('/web/dataset/call_kw/<model>/name_search', type='json',
+                auth="user")
     def name_search(self, model, method, args, kwargs):
         context = kwargs.get('context')
         if context and context.get('extended_name_with_contact'):
@@ -58,7 +63,8 @@ class DataSetCustom(DataSet):
 
         return self._call_kw(model, method, args, kwargs)
 
-    @http.route('/web/dataset/call_kw/<model>/name_get', type='json', auth="user")
+    @http.route('/web/dataset/call_kw/<model>/name_get', type='json',
+                auth="user")
     def name_get(self, model, method, args, kwargs):
         res = self._call_kw(model, method, args, kwargs)
         context = kwargs.get('context')

@@ -1,7 +1,7 @@
 odoo.define('mail_move_message.relocate', function (require) {
     "use strict";
 
-    var bus = require('bus.bus').bus;
+//    var bus = require('bus.bus').bus;
     var chat_manager = require('mail.chat_manager');
     var base_obj = require('mail_base.base');
     var thread = require('mail.ChatThread');
@@ -22,11 +22,7 @@ odoo.define('mail_move_message.relocate', function (require) {
                 this.trigger("move_message", message_id);
             };
         },
-        on_move_message: function(event){
-            var self = this;
-            var context = {
-                'default_message_id': this.id
-            };
+        on_move_message: function(message_id){
             var action = {
                 name: _t('Relocate Message'),
                 type: 'ir.actions.act_window',
@@ -41,6 +37,26 @@ odoo.define('mail_move_message.relocate', function (require) {
             this.do_action(action, {
                 'on_close': function(){}
             });
+        }
+    });
+
+    chatter.include({
+        start: function() {
+            var result = this._super.apply(this, arguments);
+            // For show wizard in the form
+            this.thread.on('move_message', this, this.thread.on_move_message);
+            return $.when(result).done(function() {});
+        }
+    });
+
+
+    var ChatAction = core.action_registry.get('mail.chat.instant_messaging');
+    ChatAction.include({
+        start: function() {
+            var result = this._super.apply(this, arguments);
+            // For show wizard in the channels
+            this.thread.on('move_message', this, this.thread.on_move_message);
+            return $.when(result).done(function() {});
         }
     });
 
@@ -78,7 +94,7 @@ odoo.define('mail_move_message.relocate', function (require) {
 
     widgets.WidgetButton.include({
         on_click: function(){
-            if(this.node.attrs.special == 'quick_create'){
+            if(this.node.attrs.special === 'quick_create'){
                 var self = this;
                 var related_field = this.field_manager.fields[this.node.attrs.field];
                 var context_built = $.Deferred();
@@ -94,8 +110,7 @@ odoo.define('mail_move_message.relocate', function (require) {
                             message_name_from,
                             message_email_from
                         ]);
-                }
-                else {
+                } else {
                     context_built.resolve(this.build_context());
                 }
                 $.when(context_built).pipe(function (context) {
@@ -119,11 +134,9 @@ odoo.define('mail_move_message.relocate', function (require) {
                         }
                     });
                 });
-            }
-            else {
+            } else {
                 this._super.apply(this, arguments);
             }
         }
     });
-
-};
+});

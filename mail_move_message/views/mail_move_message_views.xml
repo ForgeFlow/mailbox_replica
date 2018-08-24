@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp><data>
+<odoo>
 
 <template id="assets_backend" name="custom bar assets" inherit_id="web.assets_backend">
     <xpath expr="." position="inside">
         <link rel="stylesheet" href="/mail_move_message/static/src/css/mail_move_message.css"/>
-        <script type="text/javascript" src="/mail_move_message/static/src/js/mail_move_message.js"></script>
+        <script type="text/javascript" src="/mail_move_message/static/src/js/mail_move_message.js"/>
     </xpath>
 </template>
 
@@ -118,7 +118,6 @@
         </record>
 
         <!-- Add menu entry in Settings/Email -->
-        <menuitem name="Mail Relocation" id="menu_mail_move_message" parent="base.menu_email" sequence="99" action="action_mail_move_message_config"/>
+        <menuitem name="Mail Move Message" id="menu_mail_move_message" parent="base.menu_email" sequence="99" action="action_mail_move_message_config"/>
 
-    </data>
-</openerp>
+</odoo>

@@ -1,10 +1,12 @@
-Mail relocation
-===============
+.. image:: https://img.shields.io/badge/license-LGPL--3-blue.png
+   :target: https://www.gnu.org/licenses/lgpl
+   :alt: License: LGPL-3
 
-Demo: http://runbot.it-projects.info/demo/mail-addons/9.0
+=================
+Mail Move Message
+=================
 
-Description: https://www.odoo.com/apps/modules/9.0/mail_move_message/
+The module helps you to organise mails from customers.
 
-Further information and discussion: http://yelizariev.github.io/odoo/module/2015/04/10/mail-relocation.html
-
-Tested on Odoo 8.0 d023c079ed86468436f25da613bf486a4a17d625
+If customer send mail to user's personal alias (e.g. admin@yourcompany.example.com),
+a user would be able to relocate such mail to corresponding record.
