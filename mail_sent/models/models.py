@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
-from openerp import api, models, fields
+from odoo import api, fields, models
 
 
 class MailMessage(models.Model):
     _inherit = 'mail.message'
 
-    sent = fields.Boolean('Sent', compute="_compute_sent", help='Was message sent to someone', store=True)
+    sent = fields.Boolean('Sent', compute="_compute_sent",
+                          help='Was message sent to someone', store=True)
 
     @api.depends('author_id', 'partner_ids')
     def _compute_sent(self):
@@ -29,6 +30,6 @@ class MailMessage(models.Model):
 
 
 class MailComposeMessage(models.TransientModel):
-
     _inherit = 'mail.compose.message'
+
     sent = fields.Boolean('Sent', help='dummy field to fix inherit error')
