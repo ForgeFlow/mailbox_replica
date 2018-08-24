@@ -1,9 +1,9 @@
-<?xml version="1.0"?>
-<openerp>
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
     <data noupdate="1">
         <record id="mail_relocation_models" model="ir.config_parameter">
             <field name="key">mail_relocation_models</field>
             <field name="value">crm.lead,project.task</field>
         </record>
     </data>
-</openerp>
+</odoo>

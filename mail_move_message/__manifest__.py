@@ -1,18 +1,17 @@
 # -*- coding: utf-8 -*-
 {
-    'name': 'Mail relocation',
-    'version': '1.0.5',
+    'name': 'Mail Move Message',
+    'version': '10.0.1.0.0',
+    'summary': 'Relocate customer\'s mails to a correct place'
+               ' (lead, task, etc.)',
     'author': 'IT-Projects LLC, Ivan Yelizariev, Pavel Romanchenko',
     'license': 'LGPL-3',
     'category': 'Discuss',
     'images': ['images/m1.png'],
-    "support": "apps@it-projects.info",
-    'website': 'https://twitter.com/yelizariev',
-    'price': 100.00,
-    'currency': 'EUR',
-    'depends': ['mail_all', 'web_polymorphic_field'],
+    'website': 'https://www.github.com/Eficent/mailbox_replica/tree/10.0',
+    'depends': ['mail_all', 'web_polymorphic_selection'],
     'data': [
-        'mail_move_message_views.xml',
+        'views/mail_move_message_views.xml',
         'data/mail_move_message_data.xml',
     ],
     'qweb': [
