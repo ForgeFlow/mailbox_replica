@@ -36,14 +36,15 @@ odoo.define('web_polymorphic_many2one.FieldPolymorphic', function (require) {
 
         },
         set_polymorphic_event: function() {
-            self = this;
+            var self = this;
             this.field_manager.fields[this.polymorphic].$el.on(
                 'change', function(){
-                    field_value = self.field_manager.get_field_value(self.polymorphic);
-                    if(field_value !== false)
+                    var field_value = self.field_manager.get_field_value(self.polymorphic);
+                    if(field_value !== false) {
                         self.set("effective_readonly", false);
-                    else
+                    } else {
                         self.set("effective_readonly", true);
+                    }
                 }
             );
         }
