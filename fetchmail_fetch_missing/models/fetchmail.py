@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2015 Innoviu srl <http://www.innoviu.it>
 # Copyright 2015 Agile Business Group <http://www.agilebg.com>
 # Copyright 2017 Eficent Business and IT Consulting Services, S.L.
@@ -47,7 +46,7 @@ class FetchmailServer(models.Model):
             msg_str = email.message_from_string(data[0][1])
             message_id = msg_str.get('Message-ID')
             trashed_mids = mail_messages_trashed.mapped('message_id')
-            if unicode(message_id) not in stored_mids and \
+            if str(message_id) not in stored_mids and \
                     message_id not in trashed_mids:
                 messages.append(new_uid)
         for num in messages:
