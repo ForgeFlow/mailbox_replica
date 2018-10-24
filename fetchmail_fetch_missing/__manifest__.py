@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2015 Innoviu srl <http://www.innoviu.it>
 # Copyright 2015 Agile Business Group <http://www.agilebg.com>
 # Copyright 2017 Eficent Business and IT Consulting Services, S.L.
@@ -8,11 +7,11 @@
 {
     "name": "Fetchmail Fetch Missing",
     "summary": 'Fetchmail fetch missing messages',
-    "version": "10.0.1.0.0",
+    "version": "11.0.1.0.0",
     "category": "Discuss",
     "author": "Eficent, "
               "Odoo Community Association (OCA)",
-    "website": "https://www.github.com/Eficent/mailbox_replica/tree/10.0",
+    "website": "https://www.github.com/Eficent/mailbox_replica",
     "license": 'AGPL-3',
     "installable": True,
     "depends": [
