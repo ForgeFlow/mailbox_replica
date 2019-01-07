@@ -15,7 +15,7 @@ _logger = logging.getLogger(__name__)
 class FetchmailServer(models.Model):
     _inherit = "fetchmail.server"
 
-    nbr_days = fields.Float(
+    nbr_days = fields.Integer(
         string='# Days to fetch',
         help="Remote emails with a date greater today's date - # days will "
              "be fetched if not already processed",
@@ -25,19 +25,13 @@ class FetchmailServer(models.Model):
     def _fetch_missing_imap(self, imap_server, count, failed):
         mail_thread_model = self.env['mail.thread']
         messages = []
-        # Retrieve all the message id's stored in odoo
-        mail_messages = self.env['mail.message'].search([])
-        mail_messages_trashed = self.env['mail.message.trash'].search([])
-        mail_msg_d = mail_messages.read(['message_id'])
-        stored_mids = []
-        for m in mail_msg_d:
-            stored_mids.append(m['message_id'])
         fetch_from_date = datetime.today() - timedelta(days=self.nbr_days)
         search_status, uids = imap_server.search(
             None,
             'SINCE', '%s' % fetch_from_date.strftime('%d-%b-%Y')
             )
         new_uids = uids[0].split()
+        received_messages_d = {}
         for new_uid in new_uids:
             fetch_status, data = imap_server.fetch(
                 new_uid.decode(),
@@ -45,10 +39,22 @@ class FetchmailServer(models.Model):
                 )
             msg_str = email.message_from_string(data[0][1].decode())
             message_id = msg_str.get('Message-ID')
-            trashed_mids = mail_messages_trashed.mapped('message_id')
+            received_messages_d[message_id] = new_uid
+        # Retrieve all the message id's stored in odoo
+        mail_messages = self.env['mail.message'].search(
+            [('message_id', 'in', list(received_messages_d.keys()))])
+        mail_msg_d = mail_messages.read(['message_id'])
+        stored_mids = [m['message_id'] for m in mail_msg_d]
+        # Retrieve all the messages trashed
+        mail_messages_trashed = self.env['mail.message.trash'].search(
+            [('message_id', 'in', list(received_messages_d.keys()))])
+        mail_msg_d = mail_messages_trashed.read(['message_id'])
+        trashed_mids = [m['message_id'] for m in mail_msg_d]
+        # If it has not yet been received, nor was trashed then it is new
+        for message_id in received_messages_d.keys():
             if str(message_id) not in stored_mids and \
-                    message_id not in trashed_mids:
-                messages.append(new_uid)
+                    str(message_id) not in trashed_mids:
+                messages.append(received_messages_d[message_id])
         for num in messages:
             # SEARCH command *always* returns at least the most
             # recent message, even if it has already been synced
