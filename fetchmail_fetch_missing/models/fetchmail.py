@@ -15,7 +15,7 @@ _logger = logging.getLogger(__name__)
 class FetchmailServer(models.Model):
     _inherit = "fetchmail.server"
 
-    nbr_days = fields.Integer(
+    nbr_days = fields.Float(
         string='# Days to fetch',
         help="Remote emails with a date greater today's date - # days will "
              "be fetched if not already processed",
@@ -40,10 +40,10 @@ class FetchmailServer(models.Model):
         new_uids = uids[0].split()
         for new_uid in new_uids:
             fetch_status, data = imap_server.fetch(
-                int(new_uid),
+                new_uid.decode(),
                 '(BODY[HEADER.FIELDS (MESSAGE-ID)])'
                 )
-            msg_str = email.message_from_string(data[0][1])
+            msg_str = email.message_from_string(data[0][1].decode())
             message_id = msg_str.get('Message-ID')
             trashed_mids = mail_messages_trashed.mapped('message_id')
             if str(message_id) not in stored_mids and \
