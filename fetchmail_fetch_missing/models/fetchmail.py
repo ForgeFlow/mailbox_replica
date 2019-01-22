@@ -11,7 +11,12 @@ import time
 import pytz
 import email
 import hashlib
+try:
+    from xmlrpc import client as xmlrpclib
+except ImportError:
+    import xmlrpclib
 from odoo import api, fields, models, tools
+from odoo.tools import pycompat
 
 _logger = logging.getLogger(__name__)
 
@@ -50,10 +55,7 @@ class FetchmailServer(models.Model):
                 stored_date = datetime.now()
             msg_date = stored_date.strftime(
                 tools.DEFAULT_SERVER_DATETIME_FORMAT)
-        if msg_date and msg_from and msg_to:
-            return '%s/%s/%s' % (msg_from, msg_to, msg_date)
-        else:
-            return False
+        return '%s/%s/%s' % (msg_from, msg_to, msg_date)
 
     @api.model
     def _create_header_hash(self, msg_str):
@@ -90,9 +92,21 @@ class FetchmailServer(models.Model):
                 new_uid.decode(),
                 '(BODY.PEEK[HEADER])'
                 )
-            msg_str = email.message_from_string(data[0][1].decode())
-            message_id = self._get_message_id(msg_str)
-            received_messages_d[message_id] = new_uid
+            try:
+                message = data[0][1]
+                if isinstance(message, xmlrpclib.Binary):
+                    message = bytes(message.data)
+                if isinstance(message, pycompat.text_type):
+                    message = message.encode('utf-8')
+                extract = getattr(email, 'message_from_bytes',
+                                  email.message_from_string)
+                msg_txt = extract(message)
+                message_id = self._get_message_id(msg_txt)
+                received_messages_d[message_id] = new_uid
+            except Exception:
+                _logger.info('Failed to process mail from %s server %s.',
+                             self.type, self.name, exc_info=True)
+                failed += 1
         # Retrieve all the message id's stored in odoo
         mail_messages = self.env['mail.message'].search(
             [('message_id', 'in', list(received_messages_d.keys()))])

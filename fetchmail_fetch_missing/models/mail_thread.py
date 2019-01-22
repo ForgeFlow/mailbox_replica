@@ -15,11 +15,10 @@ class MailThread(models.AbstractModel):
 
     @api.model
     def _prepare_header_to_hash(self, msg_dict):
-        if msg_dict['email_from'] and msg_dict['to'] and msg_dict['date']:
-            return '%s/%s/%s' % (msg_dict['email_from'],
-                                 msg_dict['to'], msg_dict['date'])
-        else:
-            return False
+        email_from = msg_dict.get('email_from', False)
+        email_to = msg_dict.get('to', False)
+        email_date = msg_dict.get('date', False)
+        return '%s/%s/%s' % (email_from, email_to, email_date)
 
     @api.model
     def _create_header_hash(self, msg_dict):
