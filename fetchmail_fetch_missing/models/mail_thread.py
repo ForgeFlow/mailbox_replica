@@ -22,15 +22,17 @@ class MailThread(models.AbstractModel):
             return False
 
     @api.model
-    def _create_header_hash(self, data):
+    def _create_header_hash(self, msg_dict):
+        data = self._prepare_header_to_hash(msg_dict)
+        if not data:
+            return False
         sha256 = hashlib.sha256(
             data.encode('utf-8')).hexdigest()
         return sha256
 
     @api.model
     def _get_message_id(self, msg_dict):
-        data = self._prepare_header_to_hash(msg_dict)
-        message_id = self._create_header_hash(data)
+        message_id = self._create_header_hash(msg_dict)
         if not message_id:
             message_id = "<%s@localhost>" % time.time()
         return message_id
