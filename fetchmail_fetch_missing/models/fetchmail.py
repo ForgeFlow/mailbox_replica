@@ -75,7 +75,7 @@ class FetchmailServer(models.Model):
 
     @api.model
     def _fetch_missing_imap(self, imap_server, count, failed,
-                            server, additionnal_context):
+                            additionnal_context):
         MailThread = self.env['mail.thread']
         messages = []
         fetch_from_date = datetime.today() - timedelta(days=self.nbr_days)
@@ -117,19 +117,19 @@ class FetchmailServer(models.Model):
                 try:
                     res_id = MailThread.with_context(
                         **additionnal_context).message_process(
-                        server.object_id.model, data[0][1],
-                        save_original=server.original,
-                        strip_attachments=(not server.attach))
+                        self.object_id.model, data[0][1],
+                        save_original=self.original,
+                        strip_attachments=(not self.attach))
                 except Exception:
                     _logger.info('Failed to process mail from %s server %s.',
-                                 server.type, server.name, exc_info=True)
+                                 self.type, self.name, exc_info=True)
                     failed += 1
-                if res_id and server.action_id:
-                    server.action_id.with_context({
+                if res_id and self.action_id:
+                    self.action_id.with_context({
                         'active_id': res_id,
                         'active_ids': [res_id],
                         'active_model': self.env.context.get(
-                            "thread_model", server.object_id.model)
+                            "thread_model", self.object_id.model)
                     }).run()
                 imap_server.store(num, '+FLAGS', '\\Seen')
                 cr = self._cr
@@ -153,13 +153,13 @@ class FetchmailServer(models.Model):
                 additionnal_context['server_type'] = server.type
                 count, failed = 0, 0
                 fetch_from_date = datetime.today() - timedelta(
-                    days=self.nbr_days)
+                    days=server.nbr_days)
                 imap_server = None
                 try:
                     imap_server = server.connect()
                     imap_server.select()
-                    count, failed = self._fetch_missing_imap(
-                        imap_server, count, failed, server,
+                    count, failed = server._fetch_missing_imap(
+                        imap_server, count, failed,
                         additionnal_context)
                 except Exception:
                     _logger.exception(
@@ -179,5 +179,5 @@ class FetchmailServer(models.Model):
                     (count - failed), failed)
                 server.write({'date': fields.Datetime.now()})
             else:
-                super(FetchmailServer, self).fetch_mail()
+                super(FetchmailServer, server).fetch_mail()
         return True
