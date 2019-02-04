@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data>
         <record model="ir.ui.view" id="view_email_server_form">
             <field name="name">fetchmail.server.form</field>
@@ -17,21 +17,23 @@
                 <field name="date" position="after">
                     <field name="imap_fetch_from_last_date"/>
                 </field>
-                <xpath expr="//page[@string='Server &amp; Login']/group/group[3]" position="after">
-                    <group attrs="{'invisible': [('type','!=','imap')]}"
-                           string="Mailboxes to fetch">
-                        <field
-                            name="mailbox_ids"
-                            nolabel="1">
-                            <tree editable="bottom">
-                                <field name="path"/>
-                            </tree>
-                        </field>
-                    </group>
+                <xpath expr="//notebook" position="inside">
+                    <page name="mailboxes" string="Mailboxes">
+                        <group attrs="{'invisible': [('type','!=','imap')]}"
+                               string="Mailboxes to fetch">
+                            <field
+                                name="mailbox_ids"
+                                nolabel="1">
+                                <tree editable="bottom">
+                                    <field name="path"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </page>
                 </xpath>
             </field>
         </record>
     </data>
-</openerp>
+</odoo>
 
 
