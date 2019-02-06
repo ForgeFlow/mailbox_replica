@@ -4,6 +4,7 @@
 {
     'name': 'Fetch mails from IMAP since a date',
     'version': '10.0.1.0.0',
+    'license': 'AGPL-3',
     'summary': """
 Fetch emails from IMAP from a specific date.
     """,

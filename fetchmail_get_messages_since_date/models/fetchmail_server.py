@@ -81,7 +81,7 @@ class FetchMailServer(models.Model):
                                                      self.env.context.get(
                                                      "thread_model",
                                                      server.object_id.model)})
-                            self.env.cr.commit()
+                            self.env.cr.commit()  # noqa
                             count += 1
                         _logger.info("Fetched %d email(s) on %s server %s; "
                                      "and mailbox %s. %d succeeded, "
@@ -100,6 +100,7 @@ class FetchMailServer(models.Model):
                         imap_server.logout()
             server.write({'date': time.strftime(
                 tools.DEFAULT_SERVER_DATETIME_FORMAT)})
+            self.env.cr.commit()  # noqa
         return super(FetchMailServer, self).fetch_mail()
 
     @api.model
