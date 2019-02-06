@@ -95,6 +95,7 @@ class FetchMailServer(models.Model):
                                       server.type, server.name)
                 finally:
                     if imap_server:
+                        imap_server.select()
                         imap_server.close()
                         imap_server.logout()
             server.write({'date': time.strftime(
