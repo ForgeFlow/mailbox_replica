@@ -81,6 +81,9 @@ class FetchmailServer(models.Model):
         MailThread = self.env['mail.thread']
         messages = []
         fetch_from_date = datetime.today() - timedelta(days=self.nbr_days)
+        _logger.info(
+            'Starting to fetch emails from %s, from %s',
+            (imap_server.name, fetch_from_date))
         search_status, uids = imap_server.search(
             None,
             'SINCE', '%s' % fetch_from_date.strftime('%d-%b-%Y')
@@ -107,6 +110,9 @@ class FetchmailServer(models.Model):
                 _logger.info('Failed to process mail from %s server %s.',
                              self.type, self.name, exc_info=True)
                 failed += 1
+        _logger.info(
+            'Mapping searched emails with existing ones in Odoo '
+            'for %s server.' % imap_server.name)
         # Retrieve all the message id's stored in odoo
         mail_messages = self.env['mail.message'].search(
             [('message_id', 'in', list(received_messages_d.keys()))])
@@ -122,6 +128,9 @@ class FetchmailServer(models.Model):
             if str(message_id) not in stored_mids and \
                     str(message_id) not in trashed_mids:
                 messages.append(received_messages_d[message_id])
+        _logger.info(
+            'Fetching emails found truly new from Odoo '
+            'for %s server.' % imap_server.name)
         for num in messages:
             # SEARCH command *always* returns at least the most
             # recent message, even if it has already been synced
@@ -150,6 +159,9 @@ class FetchmailServer(models.Model):
                 # pylint: disable=invalid-commit
                 cr.commit()
                 count += 1
+        _logger.info(
+            'Ended fetching emails for %s server from date %s.'
+            % (imap_server.name, fetch_from_date))
         return count, failed
 
     @api.multi
