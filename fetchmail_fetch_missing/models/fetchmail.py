@@ -137,6 +137,8 @@ class FetchmailServer(models.Model):
             res_id = None
             result, data = imap_server.fetch(num, '(RFC822)')
             if data and data[0]:
+                _logger.info(
+                    'Processing email %s' % data[0][1])
                 try:
                     res_id = MailThread.with_context(
                         **additionnal_context).message_process(
