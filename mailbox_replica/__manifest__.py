@@ -16,6 +16,8 @@
         'mail_create_partner',
         'mail_all',
         'web_polymorphic_selection',
+        'mail_sent',
+        'mail_move_message',
     ],
     'author': 'Eficent',
     'summary': """
