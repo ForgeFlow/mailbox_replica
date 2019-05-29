@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2015 Innoviu srl <http://www.innoviu.it>
 # Copyright 2015 Agile Business Group <http://www.agilebg.com>
 # Copyright 2017 Eficent Business and IT Consulting Services, S.L.

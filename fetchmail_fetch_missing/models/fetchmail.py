@@ -17,6 +17,7 @@ except ImportError:
     import xmlrpclib
 from odoo import api, fields, models, tools
 from odoo.tools import pycompat
+from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 
 _logger = logging.getLogger(__name__)
 
@@ -53,8 +54,7 @@ class FetchmailServer(models.Model):
                     'with message-id %r, assuming current date/time.',
                     msg_str.get('Date'), message_id)
                 stored_date = datetime.now()
-            msg_date = stored_date.strftime(
-                tools.DEFAULT_SERVER_DATETIME_FORMAT)
+            msg_date = stored_date.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
         return '%s/%s/%s' % (msg_from, msg_to, msg_date)
 
     @api.model
@@ -82,8 +82,9 @@ class FetchmailServer(models.Model):
         messages = []
         fetch_from_date = datetime.today() - timedelta(days=self.nbr_days)
         _logger.info(
-            'Starting to fetch emails from %s, from %s',
-            (self.name, fetch_from_date))
+            'Starting to fetch emails from %s, from %s' %
+            (self.name,
+             fetch_from_date.strftime(tools.DEFAULT_SERVER_DATETIME_FORMAT)))
         search_status, uids = imap_server.search(
             None,
             'SINCE', '%s' % fetch_from_date.strftime('%d-%b-%Y')
