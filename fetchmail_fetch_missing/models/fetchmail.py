@@ -150,7 +150,7 @@ class FetchmailServer(models.Model):
                     _logger.info('Failed to process mail from %s server %s.',
                                  self.type, self.name, exc_info=True)
                     failed += 1
-                if res_id and self.action_id:
+                if res_id and hasattr(self, 'action_id') and self.action_id:
                     self.action_id.with_context({
                         'active_id': res_id,
                         'active_ids': [res_id],
