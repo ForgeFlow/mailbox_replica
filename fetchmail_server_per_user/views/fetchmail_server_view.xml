@@ -4,7 +4,6 @@
         <record model="ir.ui.view" id="view_email_server_list_messaging">
             <field name="name">fetchmail.server.list.messaging</field>
             <field name="model">fetchmail.server</field>
-            <field name="sequence">21</field>
             <field eval="0" name="priority"/>
             <field name="arch" type="xml">
                 <tree colors="blue:state == 'draft'" string="POP/IMAP Servers">
@@ -24,7 +23,6 @@
             <field name="model">fetchmail.server</field>
             <field name="inherit_id" ref="fetchmail.view_email_server_form"/>
             <field name="groups_id" eval="[(6, 0, [ref('group_email_server')])]"/>
-            <field name="sequence">21</field>
             <field name="arch" type="xml">
                 <field name="active" position="after">
                     <field name="user_id"/>
@@ -42,21 +40,19 @@
         </record>
 
         <record model="ir.actions.act_window.view" id="action_view_email_server_list_messaging">
-            <field eval="1" name="sequence"/>
             <field name="view_mode">tree</field>
             <field name="view_id" ref="view_email_server_list_messaging"/>
             <field name="act_window_id" ref="action_email_server_form_messaging"/>
         </record>
 
         <record model="ir.actions.act_window.view" id="action_view_email_server_form_messaging">
-            <field eval="2" name="sequence"/>
             <field name="view_mode">form</field>
             <field name="view_id" ref="view_email_server_form_messaging"/>
             <field name="act_window_id" ref="action_email_server_form_messaging"/>
         </record>
 
         <menuitem
-            parent="mail.mail_channel_menu_root_chat"
+            parent="mail.menu_root_discuss"
             id="menu_action_fetchmail_server_messaging"
             action="action_email_server_form_messaging"
             name="Incoming Mail Server"
