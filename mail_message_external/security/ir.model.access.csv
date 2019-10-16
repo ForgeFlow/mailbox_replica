@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_mail_message_external_all,mail.message.external.all,model_mail_message_external,,1,0,0,0
+access_mail_message_external_user,mail.message.external.user,model_mail_message_external,base.group_user,1,1,1,1
