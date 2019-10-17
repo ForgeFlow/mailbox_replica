@@ -9,12 +9,14 @@ class Partner(models.Model):
     _inherit = "res.partner"
 
     @api.multi
-    def _notify_by_email(
+    def _notify(
         self,
-        message,
+        record,
+        msg_vals,
         force_send=False,
         send_after_commit=True,
-        user_signature=True,
+        model_description=False,
+        mail_auto_delete=True,
     ):
         users_with_fetchmail = (
             self.env["res.users"]
@@ -27,9 +29,11 @@ class Partner(models.Model):
         partners = self.filtered(
             lambda p: p not in users_with_fetchmail.mapped("partner_id")
         )
-        return super(Partner, partners)._notify_by_email(
-            message=message,
-            force_send=force_send,
-            send_after_commit=send_after_commit,
-            user_signature=user_signature,
+        return super(Partner, partners)._notify(
+            record,
+            msg_vals,
+            force_send,
+            send_after_commit,
+            model_description,
+            mail_auto_delete,
         )
