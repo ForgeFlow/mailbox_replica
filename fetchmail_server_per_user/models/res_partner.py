@@ -8,16 +8,11 @@ from odoo import api, models
 class Partner(models.Model):
     _inherit = "res.partner"
 
-    @api.multi
-    def _notify(
-        self,
-        record,
-        msg_vals,
-        force_send=False,
-        send_after_commit=True,
-        model_description=False,
-        mail_auto_delete=True,
-    ):
+    @api.model
+    def _notify(self, message, rdata, record, force_send=False,
+                send_after_commit=True, model_description=False,
+                mail_auto_delete=True):
+
         users_with_fetchmail = (
             self.env["res.users"]
             .search([("partner_id", "in", self.ids)])
@@ -30,10 +25,7 @@ class Partner(models.Model):
             lambda p: p not in users_with_fetchmail.mapped("partner_id")
         )
         return super(Partner, partners)._notify(
-            record,
-            msg_vals,
-            force_send,
-            send_after_commit,
-            model_description,
-            mail_auto_delete,
+            message, rdata, record, force_send,
+            send_after_commit, model_description,
+            mail_auto_delete
         )
