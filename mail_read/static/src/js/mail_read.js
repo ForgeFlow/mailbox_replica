@@ -37,8 +37,9 @@ Mailbox.include({
     _getThreadDomain: function () {
         if (this._id === 'mailbox_channel_read') {
             return [
-                '|', ['partner_ids.user_ids', 'in', [session.uid]],
-                ['author_id.user_ids', 'in', [session.uid]]
+                '&', '|', ['partner_ids.user_ids', 'in', [session.uid]],
+                ['author_id.user_ids', 'in', [session.uid]],
+                ['partner_ids.user_ids', '!=', null]
             ];
         }
         return this._super();
