@@ -2,4 +2,4 @@
 
 from . import fetchmail_server
 from . import res_users
-from . import res_partner
+from . import mail_message
