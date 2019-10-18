@@ -44,14 +44,29 @@ class MailMessage(models.Model):
 
     @api.multi
     def _notify_compute_internal_recipients(self, record, msg_vals, rdata):
-        rdata["partners"].append(
-            {
-                "id": record.id,
-                "active": True,
-                "share": False,
-                "groups": [1],
-                "notif": "inbox",
-                "type": "user",
-            }
-        )
+
+        if msg_vals.get('partner_id', False):
+            fetchmail_server = self.env['fetchmail.server'].search(
+                [('partner_id', '=', msg_vals.get('partner_id', False))])
+            if fetchmail_server:
+                rdata["partners"].append(
+                    {
+                        "id": msg_vals.get('partner_id', False),
+                        "active": True,
+                        "share": False,
+                        "groups": [1],
+                        "notif": "inbox",
+                        "type": "user",
+                    }
+                )
+                rdata["channels"].append(
+                    {
+                        "id": 1,
+                        "active": True,
+                        "share": False,
+                        "groups": [1],
+                        "notif": "inbox",
+                        "type": "user",
+                    }
+                )
         return rdata
