@@ -1,3 +1,7 @@
+.. image:: https://img.shields.io/badge/license-LGPL--3-blue.png
+   :target: https://www.gnu.org/licenses/lgpl
+   :alt: License: LGPL-3
+
 =========
 Mail Sent
 =========
@@ -25,16 +29,3 @@ Maintainers
       Thank you for understanding!
 
       `IT-Projects Team <https://www.it-projects.info/team>`__
-
-Further information
-===================
-
-Demo: http://runbot.it-projects.info/demo/mail_addons/12.0
-
-HTML Description: https://apps.odoo.com/apps/modules/12.0/mail_sent/
-
-Usage instructions: `<doc/index.rst>`_
-
-Changelog: `<doc/changelog.rst>`_
-
-Tested on Odoo 12.0 c423e5fe047a66517a60b68874e18dc5c3697787

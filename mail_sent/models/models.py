@@ -4,7 +4,8 @@ from odoo import api, models, fields
 class MailMessage(models.Model):
     _inherit = 'mail.message'
 
-    sent = fields.Boolean('Sent', compute="_compute_sent", help='Was message sent to someone', store=True)
+    sent = fields.Boolean('Sent', compute="_compute_sent",
+                          help='Was message sent to someone', store=True)
 
     @api.depends('author_id', 'partner_ids', 'channel_ids')
     def _compute_sent(self):
@@ -12,7 +13,8 @@ class MailMessage(models.Model):
             r_sudo = r.sudo()
             recipient_ids = r_sudo.partner_ids
             author_id = r_sudo.author_id
-            res_id = r_sudo.model and r_sudo.res_id and r_sudo.env[r_sudo.model].browse(r_sudo.res_id)
+            res_id = r_sudo.model and r_sudo.res_id and r_sudo.env[
+                r_sudo.model].browse(r_sudo.res_id)
             sent = author_id and (
                 len(recipient_ids) > 1
                 or (
@@ -41,6 +43,6 @@ class MailMessage(models.Model):
 
 
 class MailComposeMessage(models.TransientModel):
-
     _inherit = 'mail.compose.message'
+
     sent = fields.Boolean('Sent', help='dummy field to fix inherit error')
