@@ -34,12 +34,17 @@ class MailMail(models.Model):
         ir_mail_server_obj = self.env['ir.mail_server']
         res_user_obj = self.env['res.users']
         for email in self:
-            if not email.mail_server_id.force_use:
-                user = res_user_obj.search(
-                    [('partner_id', '=', email.author_id.id)], limit=1)
-                if user:
+            user = res_user_obj.search(
+                [('partner_id', '=', email.author_id.id)], limit=1)
+            if user:
+                mail_server = ir_mail_server_obj.search(
+                    [('user_id', '=', user.id)], limit=1)
+                if mail_server:
+                    email.mail_server_id = mail_server.id
+                else:
                     mail_server = ir_mail_server_obj.search(
-                        [('user_id', '=', user.id)], limit=1)
+                        [('user_id', '=', False),
+                            ('force_use', '=', True)], limit=1)
                     if mail_server:
                         email.mail_server_id = mail_server.id
             email.email_from = email.mail_server_id.replace_email_name(
