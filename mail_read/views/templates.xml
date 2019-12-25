@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!--# Copyright 2016 Ivan Yelizariev <https://it-projects.info/team/yelizariev>
+    # Copyright 2018 Artyom Losev <https://it-projects.info/team/ArtyomLosev>
+    # Copyright 2018 Kolushov Alexandr <https://it-projects.info/team/KolushovAlexandr>
+    # License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl.html). -->
+<odoo>
+        <template id="mail_read_assets_backend"
+                  name="mail_read_assets_backend"
+                  inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <link rel="stylesheet" href="/mail_read/static/src/css/mail_read.css"/>
+                <script src="/mail_read/static/src/js/mail_read.js" type="text/javascript"></script>
+                <script src="/mail_read/static/src/js/test_mail_read.js" type="text/javascript"></script>
+            </xpath>
+        </template>
+</odoo>
