@@ -22,9 +22,6 @@ class MailMessage(models.Model):
                     and recipient_ids[0].id != author_id.id
                 )
                 or (
-                    len(r_sudo.channel_ids)
-                )
-                or (
                     res_id
                     and len(res_id.message_partner_ids - author_id) > 0
                 )
