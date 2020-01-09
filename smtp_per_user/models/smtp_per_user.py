@@ -7,12 +7,14 @@ from odoo import api, fields, models
 class IrMailServer(models.Model):
     _inherit = "ir.mail_server"
 
-    user_id = fields.Many2one('res.users', string="Owner")
-    email_name = fields.Char('Email Name', help="Overrides default email name")
-    force_use = fields.Boolean('Force Use',
-                               help="If checked and this server is chosen to "
-                                    "send mail message, It will ignore owners "
-                                    "mail server")
+    user_id = fields.Many2one("res.users", string="Owner")
+    email_name = fields.Char("Email Name", help="Overrides default email name")
+    force_use = fields.Boolean(
+        "Force Use",
+        help="If checked and this server is chosen to "
+        "send mail message, It will ignore owners "
+        "mail server",
+    )
 
     @api.model
     def replace_email_name(self, old_email):
@@ -27,29 +29,40 @@ class IrMailServer(models.Model):
 
 
 class MailMail(models.Model):
-    _inherit = 'mail.mail'
+    _inherit = "mail.mail"
 
     @api.multi
     def send(self, auto_commit=False, raise_exception=False):
-        ir_mail_server_obj = self.env['ir.mail_server']
-        res_user_obj = self.env['res.users']
+        ir_mail_server_obj = self.env["ir.mail_server"]
+        res_user_obj = self.env["res.users"]
         for email in self:
             user = res_user_obj.search(
-                [('partner_id', '=', email.author_id.id)], limit=1)
+                [("partner_id", "=", email.author_id.id)], limit=1
+            )
             if user:
+                # not a system notification but a email from user
                 mail_server = ir_mail_server_obj.search(
-                    [('user_id', '=', user.id)], limit=1)
+                    [("user_id", "=", user.id)], limit=1
+                )
                 if mail_server:
                     email.mail_server_id = mail_server.id
+                    # take the email from the user
+                    email.email_from = formataddr((user.name, user.email))
+                    email.reply_to = formataddr((user.name, user.email))
                 else:
+                    # if there is a email server with force use, take it
                     mail_server = ir_mail_server_obj.search(
-                        [('user_id', '=', False),
-                            ('force_use', '=', True)], limit=1)
+                        [("user_id", "=", False), ("force_use", "=", True)],
+                        limit=1,
+                    )
                     if mail_server:
                         email.mail_server_id = mail_server.id
-            email.email_from = email.mail_server_id.replace_email_name(
-                email.email_from)
-            email.reply_to = email.mail_server_id.replace_email_name(
-                email.email_from)
-        return super(MailMail, self).send(auto_commit=auto_commit,
-                                          raise_exception=raise_exception)
+                        email.email_from = email.mail_server_id.\
+                            replace_email_name(
+                                email.email_from)
+                        email.reply_to = email.mail_server_id.\
+                            replace_email_name(
+                                email.email_from)
+        return super(MailMail, self).send(
+            auto_commit=auto_commit, raise_exception=raise_exception
+        )
