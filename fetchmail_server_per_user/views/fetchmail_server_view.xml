@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+        <record model="ir.ui.view" id="view_email_server_list_messaging">
+            <field name="name">fetchmail.server.list.messaging</field>
+            <field name="model">fetchmail.server</field>
+            <field eval="0" name="priority"/>
+            <field name="arch" type="xml">
+                <tree colors="blue:state == 'draft'" string="POP/IMAP Servers">
+                    <field name="name"/>
+                    <field name="type"/>
+                    <field name="is_ssl"/>
+                    <field name="object_id"/>
+                    <field name="date"/>
+                    <field name="message_ids" string="# of emails"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_email_server_form_messaging">
+            <field name="name">fetchmail.server.form.messaging</field>
+            <field name="model">fetchmail.server</field>
+            <field name="inherit_id" ref="fetchmail.view_email_server_form"/>
+            <field name="groups_id" eval="[(6, 0, [ref('group_email_server')])]"/>
+            <field name="arch" type="xml">
+                <field name="active" position="after">
+                    <field name="user_id"/>
+                </field>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_email_server_form_messaging">
+            <field name="name">Incoming Mail Server</field>
+            <field name="res_model">fetchmail.server</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_email_server_list_messaging"/>
+            <field name="domain">[('user_id','=', uid)]</field>
+        </record>
+
+        <record model="ir.actions.act_window.view" id="action_view_email_server_list_messaging">
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_email_server_list_messaging"/>
+            <field name="act_window_id" ref="action_email_server_form_messaging"/>
+        </record>
+
+        <record model="ir.actions.act_window.view" id="action_view_email_server_form_messaging">
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_email_server_form_messaging"/>
+            <field name="act_window_id" ref="action_email_server_form_messaging"/>
+        </record>
+
+        <menuitem
+            parent="mail.menu_root_discuss"
+            id="menu_action_fetchmail_server_messaging"
+            action="action_email_server_form_messaging"
+            name="Incoming Mail Server"
+            sequence="21"
+            groups="group_email_server"
+        />
+
+</odoo>
