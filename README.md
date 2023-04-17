@@ -1,8 +1,8 @@
 
 <!-- /!\ Non OCA Context : Set here the badge of your runbot / runboat instance. -->
-[![Pre-commit Status](https://github.com/ForgeFlow/https://github.com/ForgeFlow/mailbox_replica/actions/workflows/pre-commit.yml/badge.svg?branch=14.0)](https://github.com/ForgeFlow/https://github.com/ForgeFlow/mailbox_replica/actions/workflows/pre-commit.yml?query=branch%3A14.0)
-[![Build Status](https://github.com/ForgeFlow/https://github.com/ForgeFlow/mailbox_replica/actions/workflows/test.yml/badge.svg?branch=14.0)](https://github.com/ForgeFlow/https://github.com/ForgeFlow/mailbox_replica/actions/workflows/test.yml?query=branch%3A14.0)
-[![codecov](https://codecov.io/gh/ForgeFlow/https://github.com/ForgeFlow/mailbox_replica/branch/14.0/graph/badge.svg)](https://codecov.io/gh/ForgeFlow/https://github.com/ForgeFlow/mailbox_replica)
+[![Pre-commit Status](https://github.com/ForgeFlow/https://github.com/ForgeFlow/mailbox_replica/actions/workflows/pre-commit.yml/badge.svg?branch=15.0)](https://github.com/ForgeFlow/https://github.com/ForgeFlow/mailbox_replica/actions/workflows/pre-commit.yml?query=branch%3A15.0)
+[![Build Status](https://github.com/ForgeFlow/https://github.com/ForgeFlow/mailbox_replica/actions/workflows/test.yml/badge.svg?branch=15.0)](https://github.com/ForgeFlow/https://github.com/ForgeFlow/mailbox_replica/actions/workflows/test.yml?query=branch%3A15.0)
+[![codecov](https://codecov.io/gh/ForgeFlow/https://github.com/ForgeFlow/mailbox_replica/branch/15.0/graph/badge.svg)](https://codecov.io/gh/ForgeFlow/https://github.com/ForgeFlow/mailbox_replica)
 <!-- /!\ Non OCA Context : Set here the badge of your translation instance. -->
 
 <!-- /!\ do not modify above this line -->
